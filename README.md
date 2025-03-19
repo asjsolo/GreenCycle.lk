@@ -1,2 +1,2 @@
 # ITP-Project
-Plastic Awareness and Action Platform
+Plastic Awareness and Sustainability Platform
