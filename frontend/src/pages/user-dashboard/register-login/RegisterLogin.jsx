@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./RegisterLogin.css";
 
-import mail_icon from "/Users/hafsa/Desktop/project/GreenCycle.lk/frontend/src/images/user-dashboard/mail-icon.png";
-import password_icon from "/Users/hafsa/Desktop/project/GreenCycle.lk/frontend/src/images/user-dashboard/password-icon.png";
-import user_icon from "/Users/hafsa/Desktop/project/GreenCycle.lk/frontend/src/images/user-dashboard/user-icon.png";
+import mail_icon from "../../../images/user-dashboard/mail-icon.png";
+import password_icon from "../../../images/user-dashboard/password-icon.png";
+import user_icon from "../../../images/user-dashboard/user-icon.png";
 
 const RegisterLogin = () => {
   const [action, setAction] = useState("Create your account");
