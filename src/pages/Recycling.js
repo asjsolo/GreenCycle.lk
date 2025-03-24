@@ -12,7 +12,7 @@ const RecyclingDirectory = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
   const [searchResults, setSearchResults] = useState([]); // State to hold search results
-
+  const [editingProject, setEditingProject] = useState(null);
 
 
   // Function to search recycling centers by name or location
@@ -68,6 +68,12 @@ const RecyclingDirectory = () => {
     searchRecyclingCenters(e.target.value); // Trigger search on change
   };
 
+  // Handle  upcycling project edits
+  const handleEdit = (project) => {
+    setEditingProject(project);
+    navigate("/upcycling"); 
+  };
+  
 
   return (
     <div className="container">
@@ -131,7 +137,7 @@ const RecyclingDirectory = () => {
               <p><strong>Needed Materials:</strong>{project.materialsUsed}</p>
               <p><strong>Instructions:</strong>{project.instructions}</p>
               <button onClick={()=>handleEdit(project)} className="edit-button">Edit</button>
-              
+
             </div>
           ))}
         </div>
