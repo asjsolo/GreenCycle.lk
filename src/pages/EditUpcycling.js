@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
+import "../components/EditUpcycling.css"
 
 const EditUpcycling = () => {
     const navigate = useNavigate();
@@ -49,8 +49,9 @@ const EditUpcycling = () => {
 
     return (
         <div className="edit-upcycling-form">
-            <h2>Edit Upcycling Project</h2>
+            <h2 className="update-title">Edit Upcycling Project</h2>
             <form onSubmit={handleSubmit}>
+                <label>Project Title:</label>
                 <input
                     type="text"
                     name="projectTitle"
@@ -59,28 +60,46 @@ const EditUpcycling = () => {
                     placeholder="Project Title"
                     required
                 />
+                <label>Description:</label>
                 <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
                     placeholder="Description"
+                    rows="3"
                     required
                 />
+                <label>Materials Used:</label>
                 <textarea
                     name="materialsUsed"
                     value={formData.materialsUsed}
                     onChange={handleChange}
                     placeholder="Materials Used"
+                    rows="3"
                     required
                 />
+                <label>Instructions:</label>
                 <textarea
                     name="instructions"
                     value={formData.instructions}
                     onChange={handleChange}
                     placeholder="Instructions"
+                    rows="3"
                     required
                 />
-                <button type="submit">Update Project</button>
+
+                <div className="image-input">
+                    <label>Project Image:</label><br/>
+                    <input
+                        type="text"
+                        name="image"
+                        value={formData.image}
+                        onChange={handleChange}
+                        placeholder="Image URL"
+                        required
+                    />
+                </div><br/>
+                <button type="submit" className="update-button">Update Project</button>
             </form>
         </div>
     );

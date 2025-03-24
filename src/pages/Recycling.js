@@ -73,6 +73,10 @@ const RecyclingDirectory = () => {
     navigate("/edit-upcycling", { state: { project } });
   };
 
+  //Handle delete upcycling project
+  const handleDelete = (project) => {
+    navigate("/delete-upcycling", { state: { project } });
+  };
 
 
   return (
@@ -137,7 +141,8 @@ const RecyclingDirectory = () => {
               <p><strong>Needed Materials:</strong>{project.materialsUsed}</p>
               <p><strong>Instructions:</strong>{project.instructions}</p>
               <button onClick={() => handleEdit(project)} className="edit-button">Edit</button>
-              
+              <button onClick={() => handleDelete(project)} className="delete-button">Delete</button>
+
             </div>
           ))}
         </div>
