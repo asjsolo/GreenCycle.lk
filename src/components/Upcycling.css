@@ -1,0 +1,49 @@
+.form-container {
+    max-width: 960px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 #30475e, 0 4px 8px 0 #30475e;
+  }
+
+  .upcycling-submit-topic{
+    text-align: center;
+    text-decoration: underline;
+}
+
+label {
+    font-weight: bold;
+    text-align: left;
+}
+
+input[type="text"]{
+    width: 99%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    width: 99%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+}
+
+.submit-button {
+    align-content: center;
+    padding: 10px;
+    background-color: #007b5e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #005a46;
+  }
