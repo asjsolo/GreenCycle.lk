@@ -68,12 +68,12 @@ const RecyclingDirectory = () => {
     searchRecyclingCenters(e.target.value); // Trigger search on change
   };
 
-  // Handle  upcycling project edits
+  // Handle edit upcycling project data
   const handleEdit = (project) => {
-    setEditingProject(project);
-    navigate("/upcycling"); 
+    navigate("/edit-upcycling", { state: { project } });
   };
-  
+
+
 
   return (
     <div className="container">
@@ -136,8 +136,8 @@ const RecyclingDirectory = () => {
               <p>{project.description}</p>
               <p><strong>Needed Materials:</strong>{project.materialsUsed}</p>
               <p><strong>Instructions:</strong>{project.instructions}</p>
-              <button onClick={()=>handleEdit(project)} className="edit-button">Edit</button>
-
+              <button onClick={() => handleEdit(project)} className="edit-button">Edit</button>
+              
             </div>
           ))}
         </div>

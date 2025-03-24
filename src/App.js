@@ -4,6 +4,8 @@ import RecyclingDirectory from "./pages/Recycling";
 import Upcycling from "./pages/Upcycling";
 
 
+
+
 function App() {
   return (
     <Router>
@@ -11,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<RecyclingDirectory />} /> 
           <Route path="/upcycling" element={<Upcycling />} />
+          
         </Routes>
       </div>
     </Router>
