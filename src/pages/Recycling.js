@@ -130,6 +130,7 @@ const RecyclingDirectory = () => {
               <p>{project.description}</p>
               <p><strong>Needed Materials:</strong>{project.materialsUsed}</p>
               <p><strong>Instructions:</strong>{project.instructions}</p>
+              <button onClick={()=>handleEdit(project)} className="edit-button">Edit</button>
               
             </div>
           ))}
@@ -151,3 +152,4 @@ const RecyclingDirectory = () => {
 };
 
 export default RecyclingDirectory;
+
