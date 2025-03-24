@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid } from '@mui/material';
 
-function PlasticForm({ onCalculate, onCalculateStart }) {
+function PlasticFormComponent({ onCalculate, onCalculateStart }) {
   const [bottles, setBottles] = useState(''); // Initialize with empty string
   const [bags, setBags] = useState('');    // Initialize with empty string
   const [straws, setStraws] = useState('');  // Initialize with empty string
@@ -101,4 +101,4 @@ function PlasticForm({ onCalculate, onCalculateStart }) {
   );
 }
 
-export default PlasticForm;
+export default PlasticFormComponent;

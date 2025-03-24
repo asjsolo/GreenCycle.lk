@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './PlasticForm.css';
-import PlasticForm from './PlasticForm.jsx';
+import PlasticFormComponent from './PlasticFormComponent.jsx';
 import { Container, Typography, Paper, CircularProgress } from '@mui/material';
 
-function App() {
+function PlasticForm() {
   const [footprintResult, setFootprintResult] = useState(null);
   const [descriptionResult, setDescriptionResult] = useState(null); // Add state for description
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ function App() {
         <Typography variant="h4" align="center" gutterBottom>
           Plastic Footprint Calculator
         </Typography>
-        <PlasticForm onCalculate={handleCalculate} onCalculateStart={handleCalculateStart} />
+        <PlasticFormComponent onCalculate={handleCalculate} onCalculateStart={handleCalculateStart} />
         {loading && <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}><CircularProgress /></div>}
         {footprintResult !== null && (
           <Typography variant="h6" align="center" style={{ marginTop: '20px' }}>
@@ -44,6 +44,6 @@ function App() {
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(<PlasticForm />);
 
 export default PlasticForm;
