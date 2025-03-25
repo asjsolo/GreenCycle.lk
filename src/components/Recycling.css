@@ -1,14 +1,13 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f3f4f6;
+  background-color: #abd1c6;
   margin: 0;
   padding: 0;
-}
+ }
 
 .container {
-  align-items: center;
-  padding: 20px;
-  background-color: #f3f4f6;
+  padding: 99px;
+  background-color: #abd1c6;
   min-height: 100vh;
 }
 
@@ -20,6 +19,7 @@ body {
   padding: 10px;
   border-bottom: 2px solid #ddd;
 }
+
 
 .title {
   font-size: 24px;
@@ -50,10 +50,10 @@ body {
   border-color: #007b5e;
 }
 
-.search-btn {
+.search-btn,.map-button {
   padding: 10px 15px;
   font-size: 16px;
-  background-color: #007b5e;
+  background-color: #0f3433;
   color: white;
   border: none;
   border-radius: 5px;
@@ -62,25 +62,21 @@ body {
 }
 
 .search-btn:hover {
-  background-color: #005a46;
+  background-color: #004643;
 }
 
 
 .recycling-section {
-  background-color: #007b25;
+  background-color: #004643;
   padding: 20px;
   margin-bottom: 20px;
 }
 
 .upcycling-section {
-  background-color: #9ae36a;
+  background-color: white;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
-}
-
-.contribute-title {
-  text-decoration: underline;
 }
 
 .upcycling-description {
@@ -95,43 +91,63 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, minmax(300px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(100px, 8fr));
+  gap: 12px;
   padding: 20px;
 }
 
 .card {
-  background-color: white;
+  background-color: #0f3433;
   padding: 15px;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  
+}
+
+.project {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  line-height: 1.5;
 }
 
 .project-image {
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4/3;
   object-fit: cover;
   border-radius: 8px;
 }
 
+.decription,
+.material,
+.instructions {
+  color: #abd1c6;
+}
 
-.card h3 {
+
+.card h3,
+.card h4 {
   margin-top: 10px;
   font-size: 1.2em;
+  color: #fffffe;
 }
 
 
 .section-title {
   text-align: center;
+  color: #001e1d;
 }
+
 
 
 .project-button {
   padding: 10px 15px;
   font-size: 16px;
-  background-color: #130156;
+  background-color: #001e1d;
   color: white;
   border: none;
   border-radius: 5px;
@@ -140,7 +156,7 @@ body {
 }
 
 .project-button:hover {
-  background-color: #4867ff;
+  background-color: #004643;
 }
 
 .recycling-table {
@@ -156,28 +172,18 @@ body {
 }
 
 .recycling-table th {
-  background-color: #9ae36a;
+  background-color: #abd1c6;
 
 }
 
 .recycling-table tr:nth-child(even) {
-  background-color: #9ae36a;
+  background-color: #abd1c6;
 
 }
 
 .recycling-table tr {
-  background-color: #d2ffb4;
+  background-color: #fffffe;
 
-
-}
-
-.edit-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #130156;
-  color: white;
-  border: none;
-  border-radius: 5px;
 
 }
 
@@ -222,11 +228,50 @@ body {
 }
 
 .delete-button {
-  background-color: #2b2949;
-  color: white;
+
+  background-color: #abd1c6;
+  color: black;
   border: none;
-  padding: 10px 15px;
+}
+
+.edit-button {
+  background-color: #f9bc60;
+  color: black;
+  border: none;
+
+
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.edit-button,
+.delete-button {
+  width: 90px;
+  padding: 5px 10px;
   font-size: 16px;
+  text-align: center;
   border-radius: 4px;
-  cursor: pointer;
+
+}
+
+.image-carousel {
+  margin-bottom: 15px;
+}
+
+.contribute-carousel-image {
+  width: 100%;
+  max-height: 500px;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .card {
+    max-width: 90%;
+    padding: 10px;
+  }
 }

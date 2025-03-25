@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../components/Upcycling.css";
 
+
 const Upcycling = () => {
 
     const [formData, setFormData] = useState({
@@ -56,8 +57,10 @@ const Upcycling = () => {
         }
     };
 
-return (
-    <div className="form-container">
+return (   
+
+    
+    <div className="form-container">        
         <h2 className="upcycling-submit-topic">Submit your Upcycling Project</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
@@ -115,6 +118,7 @@ return (
             <button type="submit" className="submit-button">Submit Project</button>
         </form>
     </div>
+    
 );
 };
 

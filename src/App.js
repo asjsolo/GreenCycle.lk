@@ -15,7 +15,7 @@ function App() {
           <Route path="/upcycling" element={<Upcycling />} />
           <Route path="/edit-upcycling" element={<EditUpcycling />} />
           <Route path="/delete-upcycling" element={<DeleteUpcycling />} />
-
+         
         </Routes>
       </div>
     </Router>

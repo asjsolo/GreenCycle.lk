@@ -96,7 +96,7 @@ const EditUpcycling = () => {
                         value={formData.image}
                         onChange={handleChange}
                         placeholder="Image URL"
-                        required
+                        
                     />
                 </div><br/>
                 <button type="submit" className="update-button">Update Project</button>

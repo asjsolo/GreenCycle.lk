@@ -1,7 +1,15 @@
 //import React from "react";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../components/Recycling.css"; //import CSS
+import "../components/Recycling.css";
+import upcyclingImage from "../images/Lets.png";
+import image2 from "../images/image2.png";
+import image3 from "../images/image3.png";
+import image4 from "../images/image4.png";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 
 const RecyclingDirectory = () => {
@@ -10,9 +18,9 @@ const RecyclingDirectory = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
-  const [searchResults, setSearchResults] = useState([]); // State to hold search results
-  const [editingProject, setEditingProject] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
 
 
   // Function to search recycling centers by name or location
@@ -68,6 +76,7 @@ const RecyclingDirectory = () => {
     searchRecyclingCenters(e.target.value); // Trigger search on change
   };
 
+
   // Handle edit upcycling project data
   const handleEdit = (project) => {
     navigate("/edit-upcycling", { state: { project } });
@@ -79,11 +88,24 @@ const RecyclingDirectory = () => {
   };
 
 
+  //image slider
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000
+  };
+
   return (
+
     <div className="container">
       <header className="header">
         <h1 className="title">♻️ Recycling Centers</h1>
 
+        {/*Search box*/}
         <div className="search-box ">
           <label>Location</label>
           <input
@@ -91,12 +113,20 @@ const RecyclingDirectory = () => {
             placeholder="Search recycling centers..."
             className="search-input"
             value={searchTerm}
-            onChange={handleSearchChange} // Handle input change
+            onChange={handleSearchChange}
           />
           <button className="search-btn" onClick={() => searchRecyclingCenters(searchTerm)}>
             Search
           </button></div>
+
+        {/*Map button*/}
+        <div className="header-buttons">
+          <button className="map-button">
+            View Map
+          </button></div>
+
       </header>
+
 
       {/* Display search results for Recycling Centers in a table */}
       <section className="recycling-section">
@@ -126,6 +156,14 @@ const RecyclingDirectory = () => {
         )}
       </section>
 
+      <Slider {...settings} className="image-carousel">
+
+        <img src={image2} alt="Upcycling Example 2" className="contribute-carousel-image" />
+        <img src={image3} alt="Upcycling Example 3" className="contribute-carousel-image" />
+        <img src={image4} className="contribute-carousel-image" />
+      </Slider>
+
+
       {/* Upcycling Ideas Section */}
       <section className="upcycling-section">
         <h2 className="section-title">Up-Cycling Ideas</h2>
@@ -137,12 +175,15 @@ const RecyclingDirectory = () => {
           {projects.map((project) => (
             <div className="card" key={project._id}>{project.image && <img src={project.image} alt={project.projectTitle} className="project-image" />}
               <h3>{project.projectTitle}</h3>
-              <p>{project.description}</p>
-              <p><strong>Needed Materials:</strong>{project.materialsUsed}</p>
-              <p><strong>Instructions:</strong>{project.instructions}</p>
-              <button onClick={() => handleEdit(project)} className="edit-button">Edit</button>
-              <button onClick={() => handleDelete(project)} className="delete-button">Delete</button>
-
+              <p className="decription">{project.description}</p>
+              <h4>Needed Materials:</h4>
+              <p className="material">{project.materialsUsed}</p>
+              <h4>Instructions:</h4>
+              <p className="instructions">{project.instructions}</p>
+              <div className="button-container">
+                <button onClick={() => handleEdit(project)} className="edit-button">Edit</button>
+                <button onClick={() => handleDelete(project)} className="delete-button">Delete</button>
+              </div>
             </div>
           ))}
         </div>
@@ -151,16 +192,24 @@ const RecyclingDirectory = () => {
 
       {/* upcycling project contribution section */}
       <div className="project">
-        <h3 className="contribute-title">Contribute your own Up-Cycling Project</h3>
+        <h2 className="contribute-title">Contribute your own Up-Cycling Project</h2>
+
+        <img src={upcyclingImage} alt="Upcycling Example 1" className="contribute-carousel-image" />
         <button
           onClick={() => navigate("/upcycling")}
           className="project-button">
           Post a Project
         </button>
+
       </div>
+
+
+      <br />
+
     </div>
   );
 };
 
 export default RecyclingDirectory;
 
+//https://media.istockphoto.com/id/1480031074/vector/international-mother-earth-day.jpg?s=612x612&w=0&k=20&c=EtV0ZV0mfRgvYSlbva-sUMF9-ujMPPaGe2jWTw7oC5A=
