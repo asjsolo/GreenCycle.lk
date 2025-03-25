@@ -25,10 +25,13 @@ function Navbar() {
           <Link to="/">Community Forum</Link>
         </li>
         <li>
-          <Link to="/registerLogin">User Dashboard</Link>
+          <Link to="/userDashboard">User Dashboard</Link>
         </li>
         <li>
           <Link to="/">Contact Us</Link>
+        </li>
+        <li>
+          <Link to="/registerLogin">Register</Link>
         </li>
       </ul>
     </div>
