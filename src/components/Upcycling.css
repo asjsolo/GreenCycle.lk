@@ -9,6 +9,9 @@
   backdrop-filter: blur(10px);
 }
 
+h1{
+  text-align: center;
+}
 
 
 .upcycling-submit-topic {

@@ -15,7 +15,7 @@ const DeleteUpcycling = () => {
 
             if (response.ok) {
                 alert("Project deleted successfully!");
-                navigate("/recycling-directory", { state: { refresh: true } });
+                navigate("/", { state: { refresh: true } });
             } else {
                 alert("Failed to delete project.");
             }

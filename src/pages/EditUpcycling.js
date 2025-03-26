@@ -38,7 +38,7 @@ const EditUpcycling = () => {
 
             if (response.ok) {
                 alert("Project updated successfully!");
-                navigate("/recycling-directory"); // Redirect to the directory page
+                navigate("/"); // Redirect to the directory page
             } else {
                 alert("Failed to update project.");
             }
