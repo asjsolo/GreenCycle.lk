@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+
 const DeleteUpcycling = () => {
     const navigate = useNavigate();
     const location = useLocation();

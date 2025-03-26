@@ -10,8 +10,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-
-
 const RecyclingDirectory = () => {
   const navigate = useNavigate();
 
@@ -100,11 +98,12 @@ const RecyclingDirectory = () => {
   };
 
   return (
-
+   
+    
     <div className="container">
       <header className="header">
         <h1 className="title">♻️ Recycling Centers</h1>
-
+        
         {/*Search box*/}
         <div className="search-box ">
           <label>Location</label>
@@ -160,7 +159,7 @@ const RecyclingDirectory = () => {
 
         <img src={image2} alt="Upcycling Example 2" className="contribute-carousel-image" />
         <img src={image3} alt="Upcycling Example 3" className="contribute-carousel-image" />
-        <img src={image4} className="contribute-carousel-image" />
+        <img src={image4} alt="Upcycling Example 4" className="contribute-carousel-image" />
       </Slider>
 
 
@@ -211,5 +210,3 @@ const RecyclingDirectory = () => {
 };
 
 export default RecyclingDirectory;
-
-//https://media.istockphoto.com/id/1480031074/vector/international-mother-earth-day.jpg?s=612x612&w=0&k=20&c=EtV0ZV0mfRgvYSlbva-sUMF9-ujMPPaGe2jWTw7oC5A=

@@ -6,7 +6,9 @@ body {
  }
 
 .container {
-  padding: 99px;
+  margin-top: 1px;
+  padding-left: 99px;
+  padding-right: 99px;
   background-color: #abd1c6;
   min-height: 100vh;
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../components/EditUpcycling.css"
 
+
 const EditUpcycling = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -48,6 +49,7 @@ const EditUpcycling = () => {
     };
 
     return (
+       
         <div className="edit-upcycling-form">
             <h2 className="update-title">Edit Upcycling Project</h2>
             <form onSubmit={handleSubmit}>
@@ -102,6 +104,7 @@ const EditUpcycling = () => {
                 <button type="submit" className="update-button">Update Project</button>
             </form>
         </div>
+       
     );
 };
 
