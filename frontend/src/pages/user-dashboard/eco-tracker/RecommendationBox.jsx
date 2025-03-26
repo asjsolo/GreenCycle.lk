@@ -1,3 +1,4 @@
+//RecommendationBox.jsx
 import React from "react";
 
 function RecommendationBox({ recommendations }) {

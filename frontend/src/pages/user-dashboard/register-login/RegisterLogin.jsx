@@ -1,3 +1,4 @@
+//RegistrationLogin.jsx
 import React, { useState } from "react";
 import "./RegisterLogin.css";
 

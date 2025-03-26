@@ -1,3 +1,4 @@
+//AchievementsBadges.jsx
 import React from "react";
 
 function AchievementsBadges() {
