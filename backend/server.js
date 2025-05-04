@@ -4,9 +4,11 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 
 import connectDB from "./config/mongodb.js";
+
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js"; // Assuming userRoutes exist
 import dashboardRouter from "./routes/dashboardRoutes.js"; // Assuming dashboardRoutes exist
+import footprintRouter from "./routes/footprintRoutes.js"; //import footprint routes
 
 const app = express();
 const port = process.env.PORT || 4000; // Use environment variable for port
@@ -34,6 +36,7 @@ app.get("/", (req, res) => res.send("API Working fine")); // Basic health check
 app.use("/api/auth", authRouter); // Authentication routes
 app.use("/api/user", userRouter); // User related routes (like getting profile data)
 app.use("/api/dashboard", dashboardRouter); // Dashboard specific routes (will use userAuth middleware)
+app.use("/api/footprint", footprintRouter);
 
 // --- Generic Error Handling Middleware ---
 // This should be placed after all your routes and other middleware
@@ -48,5 +51,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start the server
+// Start the serverapp.use("/api/footprint", footprintRouter); // Use the footprint routes
+
 app.listen(port, () => console.log(`Server started on PORT:${port}`));
