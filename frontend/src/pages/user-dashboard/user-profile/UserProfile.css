@@ -1,0 +1,134 @@
+/* frontend/pages/user-dashboard/user-profile/UserProfile.css */
+
+/* Container for the entire profile page content */
+.user-profile-page {
+  max-width: 600px; /* Limit the maximum width of the profile content */
+  margin: 20px auto; /* Center the container horizontally and add vertical margin */
+  padding: 30px; /* Add more padding inside the container */
+  background-color: #fff; /* White background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  font-family: "Inter", sans-serif; /* Ensure font consistency */
+}
+
+/* Heading style */
+.user-profile-page h2 {
+  font-size: 1.8rem; /* Larger heading */
+  font-weight: 700; /* Bold */
+  color: #333; /* Dark text */
+  margin-bottom: 25px; /* Space below the heading */
+  text-align: center; /* Center the heading */
+}
+
+/* Styling for messages (error and success) */
+.user-profile-page .message {
+  /* Use a generic class for messages */
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  font-weight: 500; /* Medium font weight */
+}
+
+.user-profile-page .message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.user-profile-page .message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Styling for form groups (label + input/text) */
+.user-profile-page .form-group {
+  /* Use a class for form groups */
+  margin-bottom: 20px; /* Space between form groups */
+}
+
+.user-profile-page .form-group label {
+  display: block; /* Make label a block element */
+  color: #4a5568; /* Equivalent to Tailwind text-gray-700 */
+  font-size: 0.875rem; /* Equivalent to Tailwind text-sm */
+  font-weight: 700; /* Equivalent to Tailwind font-bold */
+  margin-bottom: 8px; /* Space below label */
+}
+
+/* Styling for input fields */
+.user-profile-page .form-group input[type="text"],
+.user-profile-page .form-group input[type="email"] {
+  /* Style both text and email inputs */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Equivalent to Tailwind shadow */
+  -webkit-appearance: none; /* Remove default browser appearance */
+  -moz-appearance: none;
+  appearance: none;
+  border: 1px solid #d2d6dc; /* Equivalent to Tailwind border */
+  border-radius: 4px; /* Equivalent to Tailwind rounded */
+  width: 100%; /* Take full width */
+  padding: 10px 12px; /* Padding inside input */
+  color: #4a5568; /* Equivalent to Tailwind text-gray-700 */
+  line-height: 1.25; /* Equivalent to Tailwind leading-tight */
+  /* Focus styles using pseudo-class */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Smooth transition */
+}
+
+.user-profile-page .form-group input[type="text"]:focus,
+.user-profile-page .form-group input[type="email"]:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Focus ring equivalent */
+  border-color: #4299e1; /* Focus border color equivalent */
+}
+
+/* Styling for non-editable text (like email display) */
+.user-profile-page .form-group .non-editable-text {
+  /* Class for non-editable text */
+  color: #4a5568;
+  padding: 10px 12px;
+  background-color: #edf2f7; /* Light gray background */
+  border-radius: 4px;
+  display: block; /* Ensure it takes full width like an input */
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* Styling for the Save Button container */
+.user-profile-page .form-actions {
+  /* Class for button container */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Equivalent to Tailwind justify-between */
+  margin-top: 25px; /* Space above the button */
+}
+
+/* Styling for the Save Button */
+.user-profile-page .save-button {
+  /* Class for the button */
+  background-color: #3490dc; /* Blue color */
+  color: white;
+  font-weight: 700; /* Bold */
+  padding: 10px 16px; /* Padding top/bottom and left/right */
+  border-radius: 4px;
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Indicate it's clickable */
+  transition: background-color 0.15s ease-in-out, opacity 0.15s ease-in-out; /* Smooth transition */
+
+  /* Hover styles using pseudo-class */
+}
+
+.user-profile-page .save-button:hover {
+  background-color: #2779bd; /* Darker blue on hover */
+}
+
+/* Focus styles using pseudo-class */
+.user-profile-page .save-button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Focus ring */
+}
+
+/* Disabled styles using pseudo-class */
+.user-profile-page .save-button:disabled {
+  opacity: 0.5; /* Reduce opacity when disabled */
+  cursor: not-allowed; /* Indicate not allowed */
+}

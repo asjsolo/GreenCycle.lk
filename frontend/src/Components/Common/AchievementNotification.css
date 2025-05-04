@@ -1,0 +1,87 @@
+/* frontend/Components/Common/AchievementNotification.css */
+
+.achievement-notification {
+  position: fixed; /* Fixed position relative to the viewport */
+  bottom: 20px; /* Distance from the bottom */
+  right: 20px; /* Distance from the right */
+  z-index: 1000; /* Ensure it's above other content */
+  background-color: #fff; /* White background */
+  border: 1px solid #d1fae5; /* Light green border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px; /* Inner padding */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Larger shadow */
+  opacity: 0; /* Start hidden */
+  visibility: hidden; /* Start not visible */
+  transform: translateY(20px); /* Start slightly below its final position */
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out,
+    transform 0.5s ease-out; /* Animation */
+  max-width: 300px; /* Max width */
+  font-family: sans-serif; /* Example font */
+}
+
+/* State for showing the notification */
+.achievement-notification.show {
+  opacity: 1; /* Fully visible */
+  visibility: visible; /* Make visible */
+  transform: translateY(0); /* Move to final position */
+}
+
+/* State for hiding the notification (optional, can just rely on opacity/visibility) */
+/* .achievement-notification.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+} */
+
+.notification-content {
+  display: flex; /* Arrange badge and details side-by-side */
+  align-items: center; /* Vertically center items */
+  gap: 10px; /* Space between badge and details */
+}
+
+.notification-badge {
+  flex-shrink: 0; /* Prevent badge from shrinking */
+  width: 50px; /* Badge container size */
+  height: 50px;
+}
+
+.notification-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.notification-details {
+  flex-grow: 1; /* Allow details to take space */
+}
+
+.notification-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #047857; /* Dark green title */
+  margin-bottom: 2px;
+}
+
+.notification-name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1f2937; /* Dark text */
+  margin-bottom: 4px;
+}
+
+.notification-description {
+  font-size: 0.8rem;
+  color: #4b5563; /* Grey text */
+}
+
+/* Optional close button styling */
+/* .notification-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #999;
+} */

@@ -1,0 +1,118 @@
+/* frontend/Components/Common/ReportModal.css */
+
+/* Modal Overlay */
+.report-modal-overlay {
+  position: fixed; /* Fixed position relative to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  display: flex; /* Use flexbox to center the modal content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1001; /* Ensure it's above everything else, higher than notifications */
+  animation: fadeIn 0.3s ease-out; /* Fade-in animation */
+}
+
+/* Modal Content */
+.report-modal-content {
+  background-color: #fff; /* White background for the content */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Larger shadow */
+  width: 90%; /* Max width relative to viewport */
+  max-width: 600px; /* Max absolute width */
+  max-height: 90vh; /* Max height relative to viewport */
+  overflow-y: auto; /* Add scrollbar if content overflows vertically */
+  display: flex; /* Use flexbox for header, body, footer layout */
+  flex-direction: column; /* Stack children vertically */
+  animation: slideIn 0.3s ease-out; /* Slide-in animation */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between; /* Space out title and close button */
+  align-items: center; /* Vertically align */
+  padding: 15px 20px; /* Padding */
+  border-bottom: 1px solid #eee; /* Separator line */
+}
+
+.modal-header h2 {
+  margin: 0; /* Remove default margin */
+  font-size: 1.25rem; /* Title font size */
+  color: #333; /* Dark text */
+}
+
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #aaa; /* Grey color */
+  transition: color 0.2s ease-in-out;
+}
+
+.modal-close-button:hover {
+  color: #777; /* Darker grey on hover */
+}
+
+.modal-body {
+  padding: 20px; /* Padding for the body content */
+  flex-grow: 1; /* Allow body to fill available space */
+}
+
+.report-section {
+  margin-bottom: 20px; /* Space between sections */
+  padding-bottom: 15px; /* Padding at the bottom of the section */
+  border-bottom: 1px dashed #eee; /* Dashed separator */
+}
+
+.report-section:last-child {
+  border-bottom: none; /* No border on the last section */
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.report-section h3 {
+  font-size: 1.1rem;
+  font-weight: 600; /* Semibold */
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.report-section ul {
+  list-style: disc inside; /* Bullet points */
+  padding-left: 0; /* Remove default padding */
+}
+
+.report-section li {
+  margin-bottom: 5px; /* Space between list items */
+}
+
+/* Optional modal footer styling */
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  text-align: right;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

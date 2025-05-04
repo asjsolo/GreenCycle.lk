@@ -1,0 +1,90 @@
+/* frontend/Components/Common/Footer.css */
+
+.app-footer {
+  background-color: #313e33; /* Dark background color */
+  color: #ecf0f1; /* Light text color */
+  padding: 40px 20px; /* Padding top/bottom and sides */
+  font-family: "Inter", sans-serif; /* Ensure font consistency */
+  margin-top: auto; /* Push footer to the bottom if content is short */
+  /* If using a flex column layout for the main app container, margin-top: auto works well */
+}
+
+.footer-content {
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack sections vertically by default */
+  gap: 30px; /* Space between sections */
+  max-width: 1200px; /* Limit content width */
+  margin: 0 auto; /* Center the content */
+}
+
+/* Media query for larger screens (e.g., tablets and desktops) */
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row; /* Arrange sections horizontally on larger screens */
+    justify-content: space-between; /* Distribute space between sections */
+    flex-wrap: wrap; /* Allow wrapping if needed */
+  }
+}
+
+.footer-section {
+  flex: 1; /* Allow sections to grow */
+  min-width: 150px; /* Minimum width for sections before wrapping */
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: #3498db; /* Accent color for headings */
+  margin-bottom: 15px;
+  font-weight: 600; /* Semibold */
+  font-size: 1.1rem;
+}
+
+.footer-section p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none; /* Remove default list bullets */
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 8px; /* Space between list items */
+}
+
+.footer-section ul li a {
+  color: #ecf0f1; /* Light text color for links */
+  text-decoration: none; /* Remove underline */
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #3498db; /* Accent color on hover */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Optional: Styling for social media icons */
+/* .social-icons a {
+    color: #ecf0f1;
+    font-size: 1.5rem;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+.social-icons a:hover {
+    color: #3498db;
+} */
+
+/* Ensure the main App container allows the footer to be pushed down */
+/* Add this to your App.css or main layout CSS */
+/* html, body, #root, .App-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.App-container main { // Assuming Outlet is inside a main or similar tag
+    flex-grow: 1; // Allow main content to take up available space
+} */

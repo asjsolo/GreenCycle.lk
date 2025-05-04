@@ -1,0 +1,122 @@
+/* frontend/pages/user-dashboard/achievements-badges/AchievementCard.css */
+
+.achievement-card {
+  border: 1px solid #e5e7eb; /* Light grey border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 16px; /* Padding inside the card */
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Vertically align items */
+  gap: 16px; /* Space between badge and details */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.2s ease-in-out; /* Smooth transition on hover */
+}
+
+.achievement-card:hover {
+  transform: translateY(-3px); /* Lift card slightly on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Enhance shadow on hover */
+}
+
+/* Styling for earned state */
+.achievement-card.earned {
+  background-color: #ecfdf5; /* Light green background */
+  border-color: #a7f3d0; /* Green border */
+}
+
+/* Styling for unearned state */
+.achievement-card.unearned {
+  background-color: #f9fafb; /* Very light grey background */
+  border-color: #e5e7eb; /* Default border */
+}
+
+.achievement-card-badge {
+  flex-shrink: 0; /* Prevent shrinking */
+  width: 64px; /* Fixed width */
+  height: 64px; /* Fixed height */
+  display: flex; /* Use flexbox to center image */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.badge-image {
+  width: 100%; /* Image takes full width of container */
+  height: 100%; /* Image takes full height of container */
+  object-fit: contain; /* Ensure image scales correctly */
+}
+
+.badge-image.grayscale {
+  filter: grayscale(100%); /* Make unearned badge grey */
+  opacity: 0.6; /* Reduce opacity slightly */
+}
+
+.achievement-card-details {
+  flex-grow: 1; /* Allow details area to take up available space */
+}
+
+.achievement-card-name {
+  font-size: 1rem; /* Base font size */
+  font-weight: bold;
+  margin-bottom: 4px; /* Space below name */
+}
+
+.earned .achievement-card-name {
+  color: #047857; /* Dark green for earned name */
+}
+
+.unearned .achievement-card-name {
+  color: #1f2937; /* Dark grey for unearned name */
+}
+
+.achievement-card-description {
+  font-size: 0.875rem; /* Smaller font size */
+  color: #4b5563; /* Medium grey */
+  margin-bottom: 8px; /* Space below description */
+}
+
+.achievement-card-earned-date,
+.achievement-card-status,
+.progress-text {
+  font-size: 0.75rem; /* Even smaller font size */
+  color: #6b7280; /* Grey text */
+}
+
+.achievement-card-earned-date {
+  color: #059669; /* Green for earned date */
+  margin-top: 8px; /* Space above date */
+}
+
+.achievement-card-progress-area {
+  margin-top: 8px; /* Space above progress section */
+}
+
+.progress-bar-container {
+  width: 100%;
+  background-color: #e5e7eb; /* Light grey background for the track */
+  border-radius: 9999px; /* Fully rounded corners */
+  height: 8px; /* Height of the progress bar */
+  overflow: hidden; /* Hide anything outside the rounded corners */
+  margin-top: 4px; /* Space above the bar */
+}
+
+.progress-bar {
+  height: 100%; /* Bar takes full height of container */
+  background-color: #f59e0b; /* Yellow/Orange color for the progress */
+  border-radius: 9999px; /* Fully rounded corners */
+  transition: width 0.5s ease-in-out; /* Smooth transition for progress updates */
+}
+
+.progress-text {
+  text-align: right; /* Align progress text to the right */
+  margin-top: 4px; /* Space above text */
+  font-weight: bold; /* Make progress text bold */
+  color: #4b5563; /* Match description color */
+}
+
+/* Basic styling for the achievements grid container */
+.achievements-grid {
+  display: grid; /* Use grid layout */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(280px, 1fr)
+  ); /* Responsive columns */
+  gap: 24px; /* Gap between grid items */
+}

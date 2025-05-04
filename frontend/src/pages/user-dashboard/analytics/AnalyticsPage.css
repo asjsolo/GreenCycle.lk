@@ -1,0 +1,70 @@
+/* frontend/pages/user-dashboard/analytics/AnalyticsPage.css */
+
+/* Basic styling for the analytics page container */
+.analytics-page {
+  padding: 20px; /* Add some padding around the content */
+  /* background-color: #f9f9f9; */ /* Optional: light background */
+}
+
+/* Container for the charts to enable side-by-side layout on larger screens */
+.charts-layout-container {
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack charts vertically by default */
+  gap: 24px; /* Space between charts */
+}
+
+/* Media query for larger screens (e.g., tablets and desktops) */
+@media (min-width: 768px) {
+  /* Adjust breakpoint as needed (md in Tailwind is 768px) */
+  .charts-layout-container {
+    flex-direction: row; /* Arrange charts horizontally on larger screens */
+    flex-wrap: wrap; /* Allow charts to wrap if needed */
+  }
+}
+
+/* Style for the container holding each individual chart */
+.chart-container {
+  position: relative; /* Needed for chart.js tooltips to position correctly */
+  width: 100%; /* Take full width of its parent by default */
+  max-width: 500px; /* Set a maximum width for the chart */
+  margin: 0 auto; /* Center the chart container horizontally */
+  /* The height is set inline in the JSX (style={{ height: '300px' }}) */
+
+  /* On larger screens, allow charts to take up roughly half the container width */
+  @media (min-width: 768px) {
+    width: calc(50% - 12px); /* Take 50% width minus half the gap */
+    margin: 0; /* Remove auto margin when side-by-side */
+  }
+
+  /* Optional: Add a border or background to the chart container */
+  /* border: 1px solid #eee; */
+  /* background-color: #fff; */
+  /* padding: 15px; */
+  /* border-radius: 8px; */
+}
+
+/* Style for the sections containing each chart */
+.weekly-completed-chart,
+.category-breakdown-chart {
+  /* margin-bottom: 24px; */ /* Moved margin-bottom to charts-layout-container gap */
+  width: 100%; /* Ensure these sections take full width within the flex container */
+
+  /* On larger screens, allow sections to take up roughly half the container width */
+  @media (min-width: 768px) {
+    width: calc(50% - 12px); /* Take 50% width minus half the gap */
+  }
+}
+
+/* Style for the eco-score trend section */
+.eco-score-trend {
+  margin-bottom: 24px; /* Space below this section */
+}
+
+/* Style for headings within sections */
+.analytics-page h3 {
+  font-size: 1.1rem;
+  font-weight: 600; /* Semibold */
+  margin-bottom: 15px; /* Space below heading */
+  color: #555;
+  text-align: center; /* Center chart titles */
+}
