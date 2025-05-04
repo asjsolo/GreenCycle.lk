@@ -114,6 +114,41 @@ body {
   line-height: 1.5;
 }
 
+
+.report{background-color: white;
+padding: 20px;
+border-radius: 10px;
+margin-bottom: 20px;
+text-align: center;
+line-height: 1.5;
+}
+
+.hidden-for-pdf {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 800px;
+  background: #fff;
+  color: #000;
+  padding: 20px;
+  z-index: -1;
+  font-family: Arial, sans-serif;
+}
+
+.justified-text {
+  text-align: justify;
+}
+
+.project-summary-image {
+  max-width: 150px;
+  max-height: 120px;
+  display: block;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+
 .project-image {
   width: 100%;
   height: auto;
