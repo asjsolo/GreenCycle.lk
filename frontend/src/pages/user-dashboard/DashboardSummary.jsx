@@ -180,14 +180,14 @@ function DashboardSummary() {
           {/* Display calculated streak */}
           {/* Add streak icon */}
         </div>
-        <div className="stat-card">
+        {/*<div className="stat-card">
           <h4 className="stat-title">Total XP</h4>
           <p className="stat-value text-green-600">
             {userStats?.totalXP || 0}
           </p>{" "}
           {/* Display calculated/placeholder XP */}
-          {/* Add XP icon */}
-        </div>
+        {/* Add XP icon */}
+        {/*</div>*/}
         <div className="stat-card">
           <h4 className="stat-title">Completed Today</h4>
           <p className="stat-value text-purple-600">
