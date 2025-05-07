@@ -5,7 +5,7 @@
   max-width: 600px; /* Limit the maximum width of the profile content */
   margin: 20px auto; /* Center the container horizontally and add vertical margin */
   padding: 30px; /* Add more padding inside the container */
-  background-color: #fff; /* White background */
+  background-color: #abd1c6; /* White background */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   font-family: "Inter", sans-serif; /* Ensure font consistency */
@@ -105,12 +105,13 @@
 /* Styling for the Save Button */
 .user-profile-page .save-button {
   /* Class for the button */
-  background-color: #3490dc; /* Blue color */
-  color: white;
+  background-color: #abd1c6; /* Blue color */
+
+  color: 0c110f;
   font-weight: 700; /* Bold */
   padding: 10px 16px; /* Padding top/bottom and left/right */
   border-radius: 4px;
-  border: none; /* Remove default button border */
+  border: 3px solid #0c110f;
   cursor: pointer; /* Indicate it's clickable */
   transition: background-color 0.15s ease-in-out, opacity 0.15s ease-in-out; /* Smooth transition */
 
@@ -118,7 +119,8 @@
 }
 
 .user-profile-page .save-button:hover {
-  background-color: #2779bd; /* Darker blue on hover */
+  background-color: #059669; /* Darker blue on hover */
+  color: #ecf0f1;
 }
 
 /* Focus styles using pseudo-class */

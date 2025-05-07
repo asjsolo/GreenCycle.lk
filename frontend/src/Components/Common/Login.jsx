@@ -1,3 +1,4 @@
+//MADE CSS EDITS
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
@@ -65,7 +66,7 @@ function Login() {
         )}
 
         <form onSubmit={handleLogin}>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label for accessibility */}
             <label htmlFor="email">Email</label>
             <input
@@ -78,7 +79,7 @@ function Login() {
               placeholder="Email"
             />
           </div>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label for accessibility */}
             <label htmlFor="password">Password</label>
             <input

@@ -83,25 +83,21 @@ function AchievementsBadges() {
 
   // --- Render Logic ---
   if (loading) {
-    return <div className="p-6 text-center">Loading achievements...</div>;
+    return <div className="loading-text">Loading achievements...</div>;
   }
 
   if (error) {
     return (
-      <div className="p-6 text-red-500 text-center">
-        Error loading achievements: {error}
-      </div>
+      <div className="error-text">Error loading achievements: {error}</div>
     );
   }
 
   return (
-    <div className="achievements-page p-6 bg-white rounded shadow">
-      <h2 className="text-xl font-semibold mb-6">All Achievements</h2>
+    <div className="achievements-page">
+      <h2 className="achievements-title">All Achievements</h2>
 
-      <div className="achievements-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Map over the combined list received from the backend */}
+      <div className="achievements-grid">
         {achievementsList.map((achievement) => (
-          // Pass the achievement object (which now includes progress) to AchievementCard
           <AchievementCard key={achievement.name} achievement={achievement} />
         ))}
       </div>

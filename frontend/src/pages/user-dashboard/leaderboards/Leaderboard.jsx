@@ -86,48 +86,47 @@ function Leaderboard() {
     <div className="leaderboard-page p-6 bg-white rounded shadow">
       {" "}
       {/* Main container */}
-      <h2 className="text-xl font-semibold mb-4">Leaderboard</h2>
-      {!hasLeaderboardData ? (
-        <p className="text-gray-500">
-          No leaderboard data available yet. Complete some actions to see your
-          rank!
-        </p>
-      ) : (
-        <table className="leaderboard-table w-full">
-          {" "}
-          {/* Use a table for layout */}
-          <thead>
-            <tr>
-              <th className="text-left">Rank</th>
-              <th className="text-left">User</th>
-              <th className="text-right">Completed Actions</th>{" "}
-              {/* Align count right */}
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboardData.map((entry, index) => (
+      <h2 className="leaderboard-title">Leaderboard</h2>
+      <table className="leaderboard-table">
+        <thead>
+          <tr>
+            <th className="leaderboard-rank-cell">Rank</th>
+            <th>User</th>
+            <th className="leaderboard-action-count">Completed Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaderboardData.map((entry, index) => {
+            const isCurrentUser = user && user._id === entry.userId;
+            const medalIcons = ["🥇", "🥈", "🥉"];
+            const medal = index < 3 ? medalIcons[index] : null;
+
+            return (
               <tr
                 key={entry.userId}
-                className={`border-b last:border-b-0 ${
-                  user && user._id === entry.userId
-                    ? "bg-blue-100 font-bold"
-                    : ""
-                }`}
+                className={isCurrentUser ? "leaderboard-highlight" : ""}
               >
-                {" "}
-                {/* Highlight current user */}
-                <td className="py-2">{index + 1}</td> {/* Rank is index + 1 */}
-                <td className="py-2">{entry.userName}</td>{" "}
-                {/* Display user name */}
-                <td className="py-2 text-right">
+                <td className="leaderboard-rank-cell">
+                  {medal ? medal : index + 1}
+                </td>
+                <td>
+                  <div className="leaderboard-user-cell">
+                    <img
+                      src={`https://api.dicebear.com/8.x/initials/svg?seed=${entry.userName}`}
+                      alt="avatar"
+                      className="leaderboard-avatar"
+                    />
+                    <span>{entry.userName}</span>
+                  </div>
+                </td>
+                <td className="leaderboard-action-count">
                   {entry.totalCompletedActions}
-                </td>{" "}
-                {/* Display count, align right */}
+                </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }

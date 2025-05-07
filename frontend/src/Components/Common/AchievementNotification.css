@@ -1,3 +1,4 @@
+/*MADE CSS EDITS*/
 /* frontend/Components/Common/AchievementNotification.css */
 
 .achievement-notification {
@@ -33,43 +34,43 @@
     transform: translateY(20px);
 } */
 
-.notification-content {
+.achievement-notification-content {
   display: flex; /* Arrange badge and details side-by-side */
   align-items: center; /* Vertically center items */
   gap: 10px; /* Space between badge and details */
 }
 
-.notification-badge {
+.achievement-notification-badge {
   flex-shrink: 0; /* Prevent badge from shrinking */
   width: 50px; /* Badge container size */
   height: 50px;
 }
 
-.notification-badge img {
+.achievement-notification-badge img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.notification-details {
+.achievement-notification-details {
   flex-grow: 1; /* Allow details to take space */
 }
 
-.notification-title {
+.achievement-notification-title {
   font-size: 0.9rem;
   font-weight: bold;
   color: #047857; /* Dark green title */
   margin-bottom: 2px;
 }
 
-.notification-name {
+.achievement-notification-name {
   font-size: 1rem;
   font-weight: bold;
   color: #1f2937; /* Dark text */
   margin-bottom: 4px;
 }
 
-.notification-description {
+.achievement-notification-description {
   font-size: 0.8rem;
   color: #4b5563; /* Grey text */
 }

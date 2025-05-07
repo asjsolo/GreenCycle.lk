@@ -1,8 +1,9 @@
+/*MADE CSS EDITS*/
 /* frontend/Components/Common/Footer.css */
 
 .app-footer {
-  background-color: #313e33; /* Dark background color */
-  color: #ecf0f1; /* Light text color */
+  background-color: #151515; /* Dark background color */
+  color: #abd1c6; /* Light text color */
   padding: 40px 20px; /* Padding top/bottom and sides */
   font-family: "Inter", sans-serif; /* Ensure font consistency */
   margin-top: auto; /* Push footer to the bottom if content is short */
@@ -33,7 +34,7 @@
 
 .footer-section h3,
 .footer-section h4 {
-  color: #3498db; /* Accent color for headings */
+  color: #fffffe; /* Accent color for headings */
   margin-bottom: 15px;
   font-weight: 600; /* Semibold */
   font-size: 1.1rem;
@@ -56,14 +57,14 @@
 }
 
 .footer-section ul li a {
-  color: #ecf0f1; /* Light text color for links */
+  color: #abd1c6; /* Light text color for links */
   text-decoration: none; /* Remove underline */
   font-size: 0.9rem;
   transition: color 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-  color: #3498db; /* Accent color on hover */
+  color: #f9bc60; /* Accent color on hover */
   text-decoration: underline; /* Add underline on hover */
 }
 

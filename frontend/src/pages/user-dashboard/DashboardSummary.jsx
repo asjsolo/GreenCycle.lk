@@ -1,4 +1,5 @@
 // frontend/pages/user-dashboard/dashboard-summary/DashboardSummary.jsx
+//ORIGINAL
 import React, { useContext, useState, useEffect } from "react";
 import AuthContext from "../../context/AuthContext";
 import "./DashboardSummary.css"; // Create this CSS file
@@ -159,47 +160,45 @@ function DashboardSummary() {
   const ecoScoreTrend = userStats?.ecoScoreTrend;
 
   return (
-    <div className="dashboard-summary-page p-6 bg-white rounded shadow">
+    <div className="dashboard-summary-page">
       {" "}
       {/* Main container */}
-      <h2 className="text-2xl font-bold mb-4">Dashboard Summary</h2>
+      <h2 className="dashboard-heading">Dashboard Summary</h2>
       {/* User Profile Info (already in layout header, but could repeat or add more here) */}
       {/* You might just rely on the header in UserDashboardLayout */}
-      <div className="user-summary-profile mb-6">
-        <h3 className="text-xl font-semibold">Welcome, {user.name}!</h3>
+      <div className="user-summary-profile">
+        {/*<h3 className="profile-welcome-heading">Welcome, {user.name}!</h3>*/}
         {/*  Add user avatar, join date etc.*/}
       </div>
       {/* Statistics Section (similar to Duolingo) */}
-      <div className="user-statistics grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <div className="stat-card bg-gray-100 p-4 rounded shadow">
-          <h4 className="text-md font-semibold text-gray-700">Day Streak</h4>
-          <p className="text-2xl font-bold text-blue-600">
+      <div className="user-statistics">
+        <div className="stat-card">
+          <h4 className="stat-title">Day Streak</h4>
+          <p className="stat-value text-blue-600">
             {userStats?.dayStreak || 0}
           </p>{" "}
           {/* Display calculated streak */}
           {/* Add streak icon */}
         </div>
-        <div className="stat-card bg-gray-100 p-4 rounded shadow">
-          <h4 className="text-md font-semibold text-gray-700">Total XP</h4>
-          <p className="text-2xl font-bold text-green-600">
+        <div className="stat-card">
+          <h4 className="stat-title">Total XP</h4>
+          <p className="stat-value text-green-600">
             {userStats?.totalXP || 0}
           </p>{" "}
           {/* Display calculated/placeholder XP */}
           {/* Add XP icon */}
         </div>
-        <div className="stat-card bg-gray-100 p-4 rounded shadow">
-          <h4 className="text-md font-semibold text-gray-700">
-            Completed Today
-          </h4>
-          <p className="text-2xl font-bold text-purple-600">
+        <div className="stat-card">
+          <h4 className="stat-title">Completed Today</h4>
+          <p className="stat-value text-purple-600">
             {userStats?.completedActionsToday || 0}
           </p>{" "}
           {/* Display completed today count */}
         </div>
         {/* Add more stat cards: e.g., Badges Earned */}
-        <div className="stat-card bg-gray-100 p-4 rounded shadow">
-          <h4 className="text-md font-semibold text-gray-700">Badges Earned</h4>
-          <p className="text-2xl font-bold text-yellow-600">
+        <div className="stat-card">
+          <h4 className="stat-title">Badges Earned</h4>
+          <p className="stat-value text-yellow-600">
             {userStats?.totalBadgesEarned || 0}
           </p>{" "}
           {/* Display total badges earned */}
@@ -207,11 +206,11 @@ function DashboardSummary() {
       </div>
       {/* Eco-Score Trend Display */}
       {ecoScoreTrend && ( // Only display if trend data is available
-        <div className="eco-score-trend-display bg-white p-4 rounded shadow mb-6">
+        <div className="eco-score-trend-display">
           {" "}
           {/* Style this section */}
-          <h3 className="text-lg font-semibold mb-2">Eco-Score Trend</h3>
-          <p className="text-gray-700">
+          <h3 className="trend-heading">Eco-Score Trend</h3>
+          <p className="trend-summary">
             Your completed actions this week:{" "}
             <span className="font-bold">{ecoScoreTrend.currentWeekCount}</span>
             {" | "}
@@ -219,7 +218,7 @@ function DashboardSummary() {
             <span className="font-bold">{ecoScoreTrend.lastWeekCount}</span>
           </p>
           <p
-            className={`text-xl font-bold mt-2 ${
+            className={`trend-percentage ${
               ecoScoreTrend.trendDirection === "up"
                 ? "text-green-600"
                 : ecoScoreTrend.trendDirection === "down"
@@ -248,22 +247,22 @@ function DashboardSummary() {
         </div>
       )}
       {/* --- Generate Report Section --- */}
-      <div className="generate-report-section bg-white p-4 rounded shadow mb-6">
+      <div className="generate-report-section">
         {" "}
         {/* Style this section */}
-        <h3 className="text-lg font-semibold mb-2">Weekly Report</h3>
-        <p className="text-gray-700 mb-4">
+        <h3 className="report-heading">Weekly Report</h3>
+        <p className="report-description">
           Generate a summary of your eco activity for the last week.
         </p>
         <button
           onClick={handleGenerateReport} // Trigger the report generation function
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          className="report-button"
           disabled={reportLoading} // Disable button while loading
         >
           {reportLoading ? "Generating Report..." : "Generate Weekly Report"}
         </button>
         {/* Display report error message */}
-        {reportError && <p className="text-red-500 mt-2">{reportError}</p>}
+        {reportError && <p className="report-error-message">{reportError}</p>}
         {/* Optional: Display report data directly or trigger modal */}
         {/* For now, we'll just log it to console after successful generation */}
       </div>
@@ -277,10 +276,10 @@ function DashboardSummary() {
       )}
       {/* Recent Activity / Badge Showcase Section */}
       {/* You might fetch recent activity or a few earned badges here */}
-      <div className="recent-activity-badges bg-gray-100 p-4 rounded shadow">
-        <h3 className="text-xl font-semibold mb-4">Recent Activity / Badges</h3>
-        {/* Fetch and display recent actions or a selection of badges*/}
-      </div>
+      {/*<div className="recent-activity-badges">
+      <h3 className="recent-activity-heading">Recent Activity / Badges</h3>
+      {/* Fetch and display recent actions or a selection of badges*/}
+      {/*</div>*/}
     </div>
   );
 }

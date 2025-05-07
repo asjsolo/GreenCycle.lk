@@ -7,6 +7,7 @@ body {
   font-family: "Inter", sans-serif; /* Apply Inter font globally or to a container */
   margin: 0; /* Remove default body margin */
   padding: 0; /* Remove default body padding */
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
 }
 
 /* Container for the entire page content */
@@ -15,6 +16,8 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background: #004643;
+
   /* Dark gradient background similar to Duolingo */
   /* background: linear-gradient(
     to bottom,
@@ -74,13 +77,13 @@ body {
 }
 
 /* Styling for form groups (label + input) */
-.form-group {
+.auth-form-group {
   margin-bottom: 20px; /* More space between form groups */
   text-align: left;
 }
 
 /* Visually hide labels but keep them for accessibility (optional but good practice) */
-.form-group label {
+.auth-form-group label {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -92,9 +95,9 @@ body {
 }
 
 /* Styling for input fields */
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="password"] {
+.auth-form-group input[type="text"],
+.auth-form-group input[type="email"],
+.auth-form-group input[type="password"] {
   width: 100%;
   padding: 14px 12px; /* More padding */
   border: 1px solid rgba(255, 255, 255, 0.2); /* Lighter border */
@@ -115,7 +118,7 @@ body {
   transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-.form-group input:focus {
+.auth-form-group input:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 0.5); /* Lighter border on focus */
   background-color: rgba(

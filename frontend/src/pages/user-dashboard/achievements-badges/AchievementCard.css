@@ -1,3 +1,4 @@
+/*MADE EDIT TO CSS*/
 /* frontend/pages/user-dashboard/achievements-badges/AchievementCard.css */
 
 .achievement-card {
@@ -37,7 +38,7 @@
   align-items: center; /* Center vertically */
 }
 
-.badge-image {
+.achievement-badge-image {
   width: 100%; /* Image takes full width of container */
   height: 100%; /* Image takes full height of container */
   object-fit: contain; /* Ensure image scales correctly */

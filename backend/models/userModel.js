@@ -17,6 +17,17 @@ const userSchema = new mongoose.Schema({
   resetOtpExpireAt: { type: Number, default: 0 },
 
   // Add any other user-related fields here in the future
+  // --- NEW: Field for Monthly Plastic Usage Limit ---
+  monthlyPlasticLimit: {
+    type: Number,
+    default: null, // Default to null if no limit is set
+    min: 0, // Limit cannot be negative
+  },
+
+  calculatorUsesCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 // Use mongoose.models.user || mongoose.model pattern

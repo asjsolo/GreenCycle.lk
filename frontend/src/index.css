@@ -1,3 +1,4 @@
+/*MADE CSS EDITS*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,7 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #64836b;
+  background: #ecf0f1;
   min-height: 100vh;
 }
 

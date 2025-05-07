@@ -4,16 +4,18 @@
   background: #004643;
   min-height: 100vh;
   padding: 20px;
+  padding-top: 80px; /* Add padding for fixed navbar */
 }
 
 .plastic-calculator-container {
   display: flex;
   flex-direction: column;
   margin: auto;
-  margin-top: 50px;
+  margin-top: 50px; /* Adjust top margin */
   width: 600px;
   padding-bottom: 30px;
-  background: #004643;
+  background: #004643; /* Keep background consistent */
+  color: #f3fbfd; /* Set default text color for container */
 }
 
 .plastic-calculator-header {
@@ -57,25 +59,41 @@
 }
 
 .plastic-calculator-input label {
-  color: #f3fbfd;
-  margin-left: 10px;
-  margin-right: 10px;
+  color: #001e1d; /* Darker color for labels for contrast */
+  margin-left: 15px; /* Adjust margin */
+  margin-right: 15px; /* Adjust margin */
+  font-weight: 600;
 }
 
 .plastic-calculator-input input {
   height: 50px;
-  width: 400px;
+  width: calc(
+    100% - 30px - 100px
+  ); /* Adjust width considering label and padding */
   background: transparent;
   border: none;
   outline: none;
-  color: #797979;
+  color: #001e1d; /* Darker color for input text */
   font-size: 19px;
+  flex-grow: 1; /* Allow input to take available space */
+  padding: 0 15px; /* Add horizontal padding */
+}
+
+/* Style for number input arrows */
+.plastic-calculator-input input[type="number"]::-webkit-inner-spin-button,
+.plastic-calculator-input input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.plastic-calculator-input input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .plastic-calculator-submit-container {
   display: flex;
   gap: 30px;
   margin: 60px auto;
+  justify-content: center;
 }
 
 .plastic-calculator-submit {
@@ -109,6 +127,40 @@
   color: #f9bc60;
 }
 
+/* --- Styling for Save Status Messages --- */
+.save-status-message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.save-status-message.saving {
+  background-color: #e0f7fa; /* Light blue */
+  color: #007b8a; /* Teal */
+  border: 1px solid #b2ebf2;
+}
+
+.save-status-message.success {
+  background-color: #d4edda; /* Light green */
+  color: #155724; /* Dark green */
+  border: 1px solid #c3e6cb;
+}
+
+.save-status-message.error {
+  background-color: #f8d7da; /* Light red */
+  color: #721c24; /* Dark red */
+  border: 1px solid #f5c6cb;
+}
+
+.save-status-message.info {
+  background-color: #fff3cd; /* Light yellow */
+  color: #664d03; /* Dark yellow */
+  border: 1px solid #ffecb5;
+}
+
 .plastic-calculator-result-container {
   margin-top: 20px;
   padding: 15px;
@@ -122,6 +174,12 @@
 
 .plastic-calculator-result-container p {
   margin: 5px 0; /* Add some vertical spacing */
+}
+
+.plastic-calculator-score-explanation {
+  font-size: 0.9em; /* Smaller text for explanation */
+  color: #b2ebf2; /* Lighter text color */
+  margin-top: 10px;
 }
 
 .plastic-calculator-learn-more-button {
@@ -158,20 +216,78 @@
   width: 80%;
   max-width: 600px;
   color: #004643; /* Dark Teal Text */
+  max-height: 90vh; /* Limit modal height */
+  overflow-y: auto; /* Add scroll if needed */
+  border-radius: 8px;
 }
 
 .plastic-calculator-breakdown-modal h2 {
   color: #006064;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.plastic-calculator-breakdown-modal p {
   margin-bottom: 10px;
+  line-height: 1.5;
 }
 
 .plastic-calculator-breakdown-modal ul {
-  list-style-type: none;
-  padding: 0;
+  list-style-type: disc; /* Use disc for list items */
+  padding-left: 20px; /* Add padding for list bullets */
+  margin-bottom: 15px;
 }
 
 .plastic-calculator-breakdown-modal li {
-  margin-bottom: 5px;
+  margin-bottom: 10px; /* More space between list items */
+  display: flex; /* Use flexbox to align text and button */
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.plastic-calculator-breakdown-modal li strong {
+  font-weight: 700;
+}
+
+.plastic-calculator-eco-score-explanation h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.3em;
+  color: #006064;
+}
+
+/* --- Style for the "Add as Action" button within the tip list --- */
+.add-action-from-tip-button {
+  margin-left: 15px; /* Space between tip text and button */
+  padding: 5px 10px;
+  background-color: #9dc1b6; /* Celeste color */
+  color: #001e1d; /* Dark text */
+  border: 1px solid #738782;
+  border-radius: 4px;
+  font-size: 0.85em; /* Smaller font size */
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.add-action-from-tip-button:hover {
+  background-color: #bad1c6; /* Lighter hover */
+}
+
+.add-action-from-tip-button:active {
+  transform: translateY(1px);
+}
+
+/* Adjust button margin for wrapping */
+@media (max-width: 480px) {
+  .add-action-from-tip-button {
+    margin-left: 0;
+    margin-top: 5px; /* Add space above button when wrapped */
+  }
+  .plastic-calculator-breakdown-modal li {
+    flex-direction: column; /* Stack text and button vertically */
+    align-items: flex-start; /* Align stacked items to the start */
+  }
 }
 
 .plastic-calculator-close-button {
@@ -181,7 +297,7 @@
   border: 2px solid #a98248;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 20px; /* More space above button */
   transition: all 0.2s ease-in-out;
   font-weight: 700;
 }
@@ -194,43 +310,324 @@
   transform: translateY(3px);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
-.plastic-calculator-learn-more-button {
-  background: #f9bc60;
-  color: #001e1d;
-  font-size: 16px;
+
+/* --- Styling for History Section --- */
+.plastic-calculator-history-section {
+  margin-top: 40px; /* Space above the history section */
+  padding: 20px;
+  background-color: #006064; /* Match result container background */
+  border: 1px solid #00838f;
+  border-radius: 5px;
+  color: #e0f7fa; /* Light text color */
+}
+
+.plastic-calculator-history-section h3 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #f3fbfd; /* Lighter heading color */
+  border-bottom: 1px solid #00838f; /* Separator */
+  padding-bottom: 10px;
+}
+
+.plastic-calculator-history-section p {
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.plastic-calculator-history-section ul {
+  list-style-type: none; /* Remove default bullets */
+  padding: 0;
+}
+
+.plastic-calculator-history-section li {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Slightly transparent background for list items */
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+/* Style for the chart container */
+.history-chart-container {
+  margin-top: 20px;
+  background-color: #fff; /* White background for the chart area */
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Ensure chart text/elements are visible on white background */
+  color: #001e1d; /* Dark color for chart text elements */
+}
+
+/* Ensure chart canvas is responsive within its container */
+.history-chart-container canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* --- Recharts Specific Styling (Targeting SVG elements) --- */
+/* Style for X and Y axis labels and ticks */
+.history-chart-container .recharts-cartesian-axis-tick-value text,
+.history-chart-container .recharts-yAxis text,
+.history-chart-container .recharts-xAxis text {
+  fill: #001e1d; /* Dark color for axis labels/ticks */
+  font-size: 12px;
+}
+
+/* Style for Tooltip text */
+.history-chart-container .recharts-tooltip-label,
+.history-chart-container .recharts-tooltip-item-list {
+  color: #001e1d; /* Dark color for tooltip text */
+  font-size: 14px;
+}
+
+/* Style for Legend text */
+.history-chart-container .recharts-legend-item text {
+  fill: #001e1d; /* Dark color for legend text */
+  font-size: 14px;
+}
+
+/* Style for Grid lines (optional, can make them darker if needed) */
+.history-chart-container .recharts-cartesian-grid line {
+  stroke: #ccc; /* Keep light grey or make darker */
+}
+
+/* --- Styling for Monthly Limit Section --- */
+.plastic-calculator-limit-section {
+  margin-top: 40px; /* Space above the limit section */
+  padding: 20px;
+  background-color: #006064; /* Match other sections */
+  border: 1px solid #00838f;
+  border-radius: 5px;
+  color: #e0f7fa; /* Light text color */
+}
+
+.plastic-calculator-limit-section h3 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #f3fbfd; /* Lighter heading color */
+  border-bottom: 1px solid #00838f; /* Separator */
+  padding-bottom: 10px;
+}
+
+.plastic-calculator-limit-section .limit-status p {
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+
+/* Style for the usage exceeded text */
+.plastic-calculator-limit-section .limit-status .usage-exceeded {
+  color: #f8d7da; /* Light red color for warning */
   font-weight: bold;
+}
+
+/* Style for the limit exceeded alert message */
+.plastic-calculator-limit-section .limit-alert {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f8d7da; /* Light red background */
+  color: #721c24; /* Dark red text */
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.plastic-calculator-limit-section .set-limit-form {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed #00838f; /* Dashed separator */
+}
+
+.plastic-calculator-limit-section .set-limit-form label {
+  display: block;
+  font-size: 1em;
+  margin-bottom: 10px;
+  color: #f3fbfd; /* Lighter label color */
+}
+
+.plastic-calculator-limit-section .set-limit-form .limit-input-group {
+  display: flex; /* Use flexbox to align input and button */
+  gap: 10px; /* Space between input and button */
+  align-items: center;
+}
+
+.plastic-calculator-limit-section .set-limit-form input[type="number"] {
+  flex-grow: 1; /* Allow input to take available space */
+  padding: 10px;
+  border: 1px solid #9dc1b6; /* Border color */
+  border-radius: 5px;
+  background-color: #e0f7fa; /* Light background */
+  color: #001e1d; /* Dark text */
+  font-size: 1em;
+  outline: none;
+}
+
+.plastic-calculator-limit-section
+  .set-limit-form
+  input[type="number"]::placeholder {
+  color: #797979; /* Placeholder color */
+}
+
+.plastic-calculator-limit-section .set-limit-form input[type="number"]:focus {
+  border-color: #f9bc60; /* Focus color */
+  box-shadow: 0 0 5px rgba(249, 188, 96, 0.5);
+}
+
+.plastic-calculator-limit-section .set-limit-form button {
+  padding: 10px 15px;
+  background-color: #f9bc60; /* Orange button */
+  color: #001e1d; /* Dark text */
   border: none;
-  padding: 8px 16px; /* Adjust padding for button size */
-  border-radius: 6px;
+  border-radius: 5px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease-in-out;
-  margin-top: 15px; /* Add some space above the button */
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  font-size: 1em;
 }
 
-.plastic-calculator-learn-more-button:hover {
-  background: #ffd489;
+.plastic-calculator-limit-section .set-limit-form button:hover:not(:disabled) {
+  background-color: #ffd489; /* Lighter orange on hover */
 }
 
-.plastic-calculator-learn-more-button:active {
-  transform: translateY(2px);
+.plastic-calculator-limit-section .set-limit-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
-.plastic-calculator-view-history-button {
-  background: #9dc1b6; /* A different background color for distinction */
-  color: #001e1d;
-  font-size: 16px;
-  font-weight: bold;
+
+/* Styling for set limit error message */
+.plastic-calculator-limit-section .set-limit-error {
+  margin-top: 10px;
+  color: #f8d7da; /* Light red color for error */
+  font-size: 0.9em;
+}
+
+/* --- NEW: Styling for Report Generation Section --- */
+.plastic-calculator-report-section {
+  margin-top: 40px; /* Space above the report section */
+  padding: 20px;
+  background-color: #006064; /* Match other sections */
+  border: 1px solid #00838f;
+  border-radius: 5px;
+  color: #e0f7fa; /* Light text color */
+  text-align: center; /* Center content */
+}
+
+.plastic-calculator-report-section h3 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #f3fbfd; /* Lighter heading color */
+  border-bottom: 1px solid #00838f; /* Separator */
+  padding-bottom: 10px;
+}
+
+.plastic-calculator-report-section p {
+  margin-bottom: 15px; /* Space below paragraph */
+  font-size: 1em;
+}
+
+.plastic-calculator-report-button {
+  padding: 10px 20px;
+  background-color: #f9bc60; /* Orange button */
+  color: #001e1d; /* Dark text */
+  border: none; /* No border */
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  font-size: 1.1em;
+}
+
+.plastic-calculator-report-button:hover:not(:disabled) {
+  background-color: #ffd489; /* Lighter orange on hover */
+}
+
+.plastic-calculator-report-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Styling for report error message */
+.plastic-calculator-report-error {
+  margin-top: 10px;
+  color: #f8d7da; /* Light red color for error */
+  font-size: 0.9em;
+}
+/* --- NEW: Styles for Tab Navigation --- */
+.plastic-calculator-tabs {
+  display: flex;
+  justify-content: center; /* Center the tab buttons */
+  margin-top: 30px;
+  border-bottom: 2px solid #006064; /* Underline for the tab bar */
+  margin-bottom: 20px; /* Space below the tabs */
+}
+
+.tab-button {
+  padding: 10px 20px;
+  cursor: pointer;
   border: none;
-  padding: 8px 16px; /* Same padding as Learn More for consistency */
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
-  margin-top: 15px; /* Add space between buttons */
+  background-color: transparent; /* No background by default */
+  color: #f3fbfd; /* Light text color */
+  font-size: 1em;
+  font-weight: 500;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
+  border-bottom: 2px solid transparent; /* Transparent underline */
+  margin: 0 10px; /* Space between buttons */
 }
 
-.plastic-calculator-view-history-button:hover {
-  background: #bad1c6; /* Slightly lighter hover effect */
+.tab-button:hover {
+  color: #f9bc60; /* Highlight color on hover */
 }
 
-.plastic-calculator-view-history-button:active {
-  transform: translateY(2px);
+.tab-button.active {
+  color: #f9bc60; /* Highlight color for active tab */
+  border-bottom-color: #f9bc60; /* Highlight underline for active tab */
+  font-weight: 600;
+}
+
+/* Optional: Style for the content panels if needed */
+.plastic-calculator-tab-content {
+  /* Add padding or margin if needed */
+  padding: 20px 0; /* Example padding */
+}
+
+.tab-panel {
+  /* Basic styles for tab content area */
+  /* You can add specific styles for .calculate-panel, .history-panel, etc. */
+}
+
+/* Ensure existing sections don't have conflicting top margins or borders */
+.plastic-calculator-result-container,
+.plastic-calculator-history-section,
+.plastic-calculator-limit-section,
+.plastic-calculator-report-section {
+  margin-top: 0; /* Reset top margin as spacing is handled by tab content padding */
+  /* Adjust padding inside these sections if needed */
+}
+
+/* Keep modal styles separate as it's not part of the tabbed content */
+.plastic-calculator-breakdown-modal {
+  /* ... existing modal styles ... */
+}
+
+/* --- NEW: Style for the estimation note in the breakdown modal --- */
+.estimation-note {
+  margin-top: 15px; /* Add some space above the note */
+  font-size: 0.9em; /* Make the text slightly smaller */
+  color: #006064; /* Use a slightly lighter color than the main text in the modal */
+  font-style: italic; /* Make it italic to indicate it's a note */
+  text-align: center; /* Center the text */
+  padding: 0 10px; /* Add some horizontal padding */
+}
+
+/* Add a rule to ensure it doesn't have the same bottom margin as regular paragraphs if they have one */
+.plastic-calculator-breakdown-modal .estimation-note {
+  margin-bottom: 15px; /* Keep consistency with other paragraphs, or adjust */
 }

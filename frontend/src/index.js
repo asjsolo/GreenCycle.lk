@@ -1,3 +1,4 @@
+//USED AUTHLAYOUT
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -21,6 +22,11 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import VerifyEmail from "./Components/Auth/VerifyEmail"; // Verification page component
 import UserProfile from "./pages/user-dashboard/user-profile/UserProfile";
+import ContactUs from "./pages/ContactUs";
+import AuthLayout from "./Components/Layout/AuthLayout";
+
+// Import the Achievement Notification Provider
+import { AchievementNotificationProvider } from "./context/AchievementNotificationContext";
 
 // Define your router configuration
 const router = createBrowserRouter([
@@ -37,26 +43,7 @@ const router = createBrowserRouter([
         element: <Home />, // Your landing page
         // Alternative: { index: true, element: <Navigate to="/login" replace /> } to redirect root to login
       },
-      {
-        path: "register", // Relative path, becomes /register
-        element: <Register />,
-      },
-      {
-        path: "login", // Relative path, becomes /login
-        element: <Login />,
-      },
-      {
-        path: "verify-email", // Relative path, becomes /verify-email
-        element: <VerifyEmail />, // Verification page - NOT protected by ProtectedRoute
-      },
-      {
-        path: "forgot-password", // Route for requesting OTP
-        element: <ForgotPassword />,
-      },
-      {
-        path: "reset-password", // Route for entering OTP and new password
-        element: <ResetPassword />,
-      },
+
       {
         path: "plasticFootprintCalculator", // Relative path, becomes /plasticFootprintCalculator
         element: <PlasticFootprintCalculator />, // Assuming this page is public
@@ -64,6 +51,18 @@ const router = createBrowserRouter([
       {
         path: "about-us", // <<< Add the route path
         element: <AboutUs />, // <<< Use the AboutUs component
+      },
+      {
+        path: "contact-us", // <<< Add the route path
+        element: <ContactUs />, // <<< Use the ContactUs component
+      },
+      // --- NEW: Route to ignore /api paths ---
+      // This route will match any path starting with /api and prevent
+      // react-router-dom from handling it, allowing the browser to
+      // make the request directly to the backend.
+      {
+        path: "/api/*", // Match any path starting with /api
+        element: null, // Render nothing for these paths
       },
 
       // --- Protected Routes ---
@@ -141,6 +140,37 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  {
+    // --- NEW: This is the layout route for authentication pages ---
+    // These child routes will use the AuthLayout component and NOT have the Navbar/Footer
+    path: "/", // You can use a common path like "/auth" if preferred, but "/" works too
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "verify-email",
+        element: <VerifyEmail />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password", // Route for entering OTP and new password
+        element: <ResetPassword />,
+      },
+      // Add other auth-related routes here if any
+      // Example: { path: "reset-password/:token", element: <ResetPassword /> },
+    ],
+  },
 ]);
 
 // Create root
@@ -149,11 +179,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     {" "}
-    {/* Good practice for development checks */}
+    {/* Good practice for development */}
+    {/* Wrap the entire application with AuthProvider */}
     <AuthProvider>
-      {" "}
-      {/* Wrap RouterProvider with AuthProvider */}
-      <RouterProvider router={router} />
+      {/* --- NEW: Wrap the entire application with AchievementNotificationProvider --- */}
+      <AchievementNotificationProvider>
+        <RouterProvider router={router} /> {/* Provide the router instance */}
+      </AchievementNotificationProvider>
     </AuthProvider>
   </React.StrictMode>
 );

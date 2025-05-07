@@ -1,99 +1,127 @@
+// frontend/src/pages/user-dashboard/achievements-badges/AchievementCard.jsx
 import React from "react";
 import "./AchievementCard.css";
 
+// --- Import all your badge images here ---
+import ecoNewbieBadge from "../../../images/user-dashboard/badges/eco-newbie.png";
+import ecoNewbieGreyBadge from "../../../images/user-dashboard/badges/eco-newbie_grey.png";
+
+import greenWarriorBadge from "../../../images/user-dashboard/badges/green-warrior.png";
+import greenWarriorGreyBadge from "../../../images/user-dashboard/badges/green-warrior_grey.png";
+
+import ecoChampionBadge from "../../../images/user-dashboard/badges/eco-champion.png";
+import ecoChampionGreyBadge from "../../../images/user-dashboard/badges/eco-champion_grey.png";
+
+import recyclingRangerBadge from "../../../images/user-dashboard/badges/recycling-ranger.png";
+import recyclingRangerGreyBadge from "../../../images/user-dashboard/badges/recycling-ranger_grey.png";
+
+import directoryExplorerBadge from "../../../images/user-dashboard/badges/directory-explorer.png";
+import directoryExplorerGreyBadge from "../../../images/user-dashboard/badges/directory-explorer_grey.png";
+
+import firstStepBadge from "../../../images/user-dashboard/badges/first-step.png";
+import firstStepGreyBadge from "../../../images/user-dashboard/badges/first-step_grey.png";
+
+import plasticReductionistBadge from "../../../images/user-dashboard/badges/plastic-reductionist.png";
+import plasticReductionistGreyBadge from "../../../images/user-dashboard/badges/plastic-reductionist_grey.png";
+
+import communityBuilderBadge from "../../../images/user-dashboard/badges/community-builder.png";
+import communityBuilderGreyBadge from "../../../images/user-dashboard/badges/community-builder_grey.png";
+
+import calculatorMasterBadge from "../../../images/user-dashboard/badges/calculator-master.png";
+import calculatorMasterGreyBadge from "../../../images/user-dashboard/badges/calculator-master_grey.png";
+
+// --- Mapping from filename to image module ---
+export const badgeImageMap = {
+  "eco-newbie.png": ecoNewbieBadge,
+  "eco-newbie_grey.png": ecoNewbieGreyBadge,
+  "green-warrior.png": greenWarriorBadge,
+  "green-warrior_grey.png": greenWarriorGreyBadge,
+  "eco-champion.png": ecoChampionBadge,
+  "eco-champion_grey.png": ecoChampionGreyBadge,
+  "recycling-ranger.png": recyclingRangerBadge,
+  "recycling-ranger_grey.png": recyclingRangerGreyBadge,
+  "directory-explorer.png": directoryExplorerBadge,
+  "directory-explorer_grey.png": directoryExplorerGreyBadge,
+  "first-step.png": firstStepBadge,
+  "first-step_grey.png": firstStepGreyBadge,
+  "plastic-reductionist.png": plasticReductionistBadge,
+  "plastic-reductionist_grey.png": plasticReductionistGreyBadge,
+  "community-builder.png": communityBuilderBadge,
+  "community-builder_grey.png": communityBuilderGreyBadge,
+  "calculator-master.png": calculatorMasterBadge,
+  "calculator-master_grey.png": calculatorMasterGreyBadge,
+};
+
 function AchievementCard({ achievement }) {
-  // Receives an achievement object from the combined list
   const {
     name,
     description,
-    badgeImageUrl, // URL to the badge image
-    criteria, // The criteria object { type, threshold, keywords }
-    isEarned, // Boolean indicating if earned by the user
-    earnedDate, // Date if earned (or null)
-    currentProgress, // Placeholder progress (needs backend data)
-    totalNeeded, // Total needed for criteria (from definition)
-    tier, // Optional tier
-    bonusType, // Optional bonus type
+    badgeFilename,
+    criteria,
+    isEarned,
+    earnedDate,
+    currentProgress,
+    totalNeeded,
+    tier,
+    bonusType,
   } = achievement;
 
-  // Determine badge source - maybe a default grey version if not earned?
-  // For simplicity, let's assume badgeImageUrl always points to the earned image
-  // You might need a grey_badgeImageUrl in your definitions for unearned state
-  const badgeSrc = badgeImageUrl || "/images/badges/default.png"; // Use a default if URL is missing
-  const greyBadgeSrc =
-    badgeSrc.replace(".png", "_grey.png") || "/images/badges/default_grey.png"; // Example: Assume grey versions exist
+  const earnedBadgeSrc = badgeFilename ? badgeImageMap[badgeFilename] : null;
+  const greyBadgeFilename = badgeFilename
+    ? badgeFilename.replace(".png", "_grey.png")
+    : null;
+  const greyBadgeSrc = greyBadgeFilename
+    ? badgeImageMap[greyBadgeFilename]
+    : null;
 
-  // Calculate percentage for progress bar (handle division by zero)
+  const finalBadgeSrc = isEarned
+    ? earnedBadgeSrc || "/images/badges/default.png"
+    : greyBadgeSrc || "/images/badges/default_grey.png";
+
   const progressPercentage =
-    totalNeeded && totalNeeded > 0
-      ? Math.min((currentProgress / totalNeeded) * 100, 100) // Progress capped at 100%
-      : 0; // Default 0% if no total needed or total is 0
+    totalNeeded > 0 && currentProgress !== undefined
+      ? Math.min((currentProgress / totalNeeded) * 100, 100)
+      : 0;
 
   return (
-    // Main card container - use class for styling
     <div className={`achievement-card ${isEarned ? "earned" : "unearned"}`}>
-      {" "}
-      {/* Use specific classes 'earned'/'unearned' */}
-      {/* Badge Image Area */}
       <div className="achievement-card-badge">
-        {" "}
-        {/* Specific class for badge area */}
         <img
-          src={isEarned ? badgeSrc : greyBadgeSrc}
+          src={finalBadgeSrc}
           alt={`${name} ${isEarned ? "Earned" : "Not Earned"} Badge`}
-          className={`badge-image ${!isEarned ? "grayscale" : ""}`}
+          className={`achievement-badge-image ${!isEarned ? "grayscale" : ""}`}
         />
       </div>
-      {/* Achievement Details Area */}
+
       <div className="achievement-card-details">
-        {" "}
-        {/* Specific class for details area */}
-        {/* Name */}
-        <h3 className="achievement-card-name">{name}</h3>{" "}
-        {/* Use class for name */}
-        {/* Description */}
-        <p className="achievement-card-description">{description}</p>{" "}
-        {/* Use class for description */}
-        {/* Status or Progress Area */}
+        <h3 className="achievement-card-name">{name}</h3>
+        <p className="achievement-card-description">{description}</p>
+
         {isEarned ? (
-          // Display earned date if earned
           <p className="achievement-card-earned-date">
-            {" "}
-            {/* Use class for earned date */}
             Earned on{" "}
             {earnedDate
               ? new Date(earnedDate).toLocaleDateString()
               : "Unknown Date"}
           </p>
         ) : (
-          // Display progress or "Not Earned Yet" if unearned
           <div className="achievement-card-progress-area">
-            {" "}
-            {/* Specific class for progress area */}
-            <p className="achievement-card-status">Not Earned Yet</p>{" "}
-            {/* Use class for status */}
-            {/* Progress Bar Container (Show only for criteria with a defined totalNeeded) */}
-            {totalNeeded &&
-              totalNeeded > 0 &&
-              criteria.type === "actionCount" && (
-                <div className="progress-bar-container">
-                  {" "}
-                  {/* Use class for container */}
-                  <div
-                    className="progress-bar"
-                    style={{ width: `${progressPercentage}%` }}
-                  ></div>{" "}
-                  {/* Use class for the bar */}
-                </div>
-              )}
-            {/* Progress Text (Show current/total for relevant criteria) */}
-            {totalNeeded &&
-              totalNeeded > 0 &&
-              criteria.type === "actionCount" && (
-                <p className="progress-text">
-                  {currentProgress} / {totalNeeded}
-                </p>
-              )}
+            <p className="achievement-card-status">Not Earned Yet</p>
+
+            {totalNeeded > 0 && currentProgress !== undefined && (
+              <div className="progress-bar-container">
+                <div
+                  className="progress-bar"
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
+              </div>
+            )}
+
+            {totalNeeded > 0 && currentProgress !== undefined && (
+              <p className="progress-text">
+                {currentProgress} / {totalNeeded}
+              </p>
+            )}
           </div>
         )}
       </div>

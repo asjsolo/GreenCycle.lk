@@ -1,3 +1,4 @@
+//MADE CSS EDITS
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
@@ -144,7 +145,7 @@ function VerifyEmail() {
         )}
 
         <form onSubmit={handleVerify}>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="otp">OTP</label>
             <input

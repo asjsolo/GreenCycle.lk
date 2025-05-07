@@ -1,22 +1,10 @@
 // backend/controllers/dashboardController.js
 import mongoose from "mongoose";
 import EcoAction from "../models/ecoActionModel.js";
-import Achievement from "../models/achievementModel.js";
+import Achievement from "../models/achievementModel.js"; // Import Achievement model
 import User from "../models/userModel.js";
-import { achievementDefinitions } from "../utils/achievements.js";
+import { achievementDefinitions } from "../utils/achievements.js"; // Import definitions
 import { suggestionDefinitions } from "../utils/suggestions.js";
-
-// Helper function to check and award achievements (Good idea to separate this logic)
-const checkAndAwardAchievements = async (userId) => {
-  // This function would contain the logic currently in updateEcoAction's 'if (completed)' block
-  // We'll refine this when we integrate achievements properly.
-  console.log(`Checking achievements for user ${userId}...`);
-  // Placeholder for actual achievement logic
-  // ... fetch completed actions count ...
-  // ... fetch user's existing achievements ...
-  // ... loop through definitions and check criteria ...
-  // ... save new achievements ...
-};
 
 // Helper function to calculate the start of the week (Monday UTC)
 const getStartOfWeekUTC = (date) => {
@@ -46,6 +34,104 @@ const getStartOfTomorrowUTC = () => {
   return tomorrowUTC;
 };
 
+// --- Helper function to check and award achievements ---
+// This function will check all unearned achievements against the user's current stats
+// It can be called after any event that might trigger an achievement (action completed, calculator used, etc.)
+export const checkAndAwardAchievements = async (userId) => {
+  console.log(`Checking and awarding achievements for user ${userId}...`);
+  const awardedAchievements = []; // Array to store newly awarded achievements
+
+  try {
+    // Fetch the user's current stats needed for achievement criteria
+    const user = await User.findById(userId)
+      .select("calculatorUsesCount")
+      .lean(); // Fetch calculator count
+    const completedActionsCount = await EcoAction.countDocuments({
+      userId,
+      completed: true,
+      suggested: false,
+    }); // Count user-added completed actions
+    // Add fetches for other stats as needed (e.g., forum post count, directory search count)
+
+    const existingAchievements = await Achievement.find({ userId }).distinct(
+      "name"
+    ); // Get names of achievements already earned
+
+    for (const achievementDef of achievementDefinitions) {
+      // Check if the user has NOT already earned this achievement
+      if (!existingAchievements.includes(achievementDef.name)) {
+        const { criteria } = achievementDef;
+        let criteriaMet = false;
+
+        // --- Check Criteria ---
+        if (
+          criteria.type === "actionCount" &&
+          completedActionsCount >= criteria.threshold
+        ) {
+          criteriaMet = true;
+        } else if (
+          criteria.type === "actionText" &&
+          criteria.keywords &&
+          criteria.keywords.length > 0
+        ) {
+          // This check is more complex and ideally needs to look at recent actions
+          // For simplicity here, we'll assume the check happens when an action is completed (in updateEcoAction)
+          // A better approach would be to pass the specific completed action to this function.
+          // For now, this function primarily handles count-based and potentially other user-stat based achievements.
+          // We'll handle actionText criteria check specifically in updateEcoAction for the completed action.
+          // You might remove this 'actionText' check from this general function if it's only checked on action completion.
+          // Example basic check (less accurate without specific action context):
+          // const recentActions = await EcoAction.find({ userId, completed: true, createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }).lean();
+          // if (recentActions.some(action => criteria.keywords.some(keyword => action.text.toLowerCase().includes(keyword.toLowerCase())))) {
+          //     criteriaMet = true;
+          // }
+        } else if (
+          criteria.type === "calculatorUsage" &&
+          user &&
+          user.calculatorUsesCount >= criteria.threshold
+        ) {
+          // --- Check Calculator Usage Criteria ---
+          criteriaMet = true;
+        }
+        // Add checks for other criteria types (e.g., directoryUsage, forumActivity) here
+        // else if (criteria.type === "directoryUsage" && user && user.directorySearchCount >= criteria.threshold) { criteriaMet = true; }
+        // else if (criteria.type === "forumActivity" && user && user.forumPostCount >= criteria.threshold) { criteriaMet = true; }
+
+        // --- If Criteria Met and Not Already Earned, Award Achievement ---
+        if (criteriaMet) {
+          const newAchievement = new Achievement({
+            userId,
+            name: achievementDef.name,
+            description: achievementDef.description,
+            // You might want to save criteria here too: criteria: achievementDef.criteria,
+            badgeFilename: achievementDef.badgeFilename, // Use badgeFilename from definition
+            tier: achievementDef.tier,
+            bonusType: achievementDef.bonusType,
+            earnedDate: new Date(),
+          });
+          await newAchievement.save();
+          console.log(
+            `Achievement awarded to user ${userId}: ${achievementDef.name}`
+          );
+          awardedAchievements.push(newAchievement.toObject()); // Add to the list of awarded achievements
+        }
+      }
+    }
+
+    console.log(
+      `Finished checking achievements for user ${userId}. Awarded ${awardedAchievements.length} new achievements.`
+    );
+    return awardedAchievements; // Return the list of newly awarded achievements
+  } catch (error) {
+    console.error(
+      `Error checking and awarding achievements for user ${userId}:`,
+      error
+    );
+    // Do not re-throw, just log the error so the main operation (like updating action) can continue
+    return []; // Return empty array on error
+  }
+};
+
 // Get all eco actions for the authenticated user
 export const getEcoActions = async (req, res) => {
   try {
@@ -73,15 +159,11 @@ export const addEcoAction = async (req, res) => {
 
     // NEW: Basic category validation (if required)
     if (!category) {
-      // Decide how to handle missing category for user-added actions
-      // Option 1: Return error if category is expected from frontend
-      // return res.status(400).json({ message: "Action category is required." });
-      // Option 2: Assign a default category if not provided (for user input)
-      console.warn(
-        `addEcoAction: Category not provided for user action "${text}". Assigning default.`
-      );
       // Use a default category if none is provided
       const defaultCategory = "General"; // Define your default category
+      console.warn(
+        `addEcoAction: Category not provided for user action "${text}". Assigning default "${defaultCategory}".`
+      );
       const newAction = new EcoAction({
         userId,
         text,
@@ -95,6 +177,10 @@ export const addEcoAction = async (req, res) => {
         "Successfully created user action with default category:",
         savedAction
       );
+
+      // After adding a new action, check for achievements that might be triggered by adding actions (less common)
+      // await checkAndAwardAchievements(userId); // Call general check (optional here)
+
       return res.status(201).json(savedAction); // 201 Created
     }
 
@@ -127,7 +213,7 @@ export const addEcoAction = async (req, res) => {
   }
 };
 
-// --- Updated Controller: updateEcoAction (Return Awarded Achievement) ---
+// --- Updated Controller: updateEcoAction (Check Achievements and Use badgeFilename) ---
 export const updateEcoAction = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -141,113 +227,114 @@ export const updateEcoAction = async (req, res) => {
     }
 
     // Find the action by its ID and userId to ensure ownership, and update it
-    const updatedAction = await EcoAction.findOneAndUpdate(
-      { _id: actionId, userId },
-      { completed, updatedAt: Date.now() },
-      { new: true } // Return the updated document
-    ).lean(); // Use .lean() here too for consistency if not saving again
+    // Fetch the action *before* updating to check its previous completed status if needed
+    const actionBeforeUpdate = await EcoAction.findOne({
+      _id: actionId,
+      userId,
+    }).lean();
 
-    if (!updatedAction) {
+    if (!actionBeforeUpdate) {
       console.log("Eco action not found or not authorized:", actionId, userId);
       return res
         .status(404)
         .json({ message: "Eco action not found or not authorized." });
     }
 
-    // --- Achievement Logic (Modify to capture awarded achievement) ---
-    let newlyAwardedAchievement = null; // Variable to store the awarded achievement
+    // Only proceed with update if the completed status is actually changing
+    if (actionBeforeUpdate.completed === completed) {
+      console.log(
+        `Action ${actionId} completed status is already ${completed}. No update needed.`
+      );
+      return res.status(200).json({ updatedAction: actionBeforeUpdate }); // Return the existing action
+    }
 
-    if (updatedAction.completed === true && completed === true) {
-      // Ensure it was just marked completed (check if previous state was false,
-      // but the findOneAndUpdate doesn't give us the previous state easily with {new: true}.
-      // A more robust check might involve fetching the document first without updating,
-      // or using a pre-update hook. For now, we assume this block is hit only on completion).
+    const updatedAction = await EcoAction.findOneAndUpdate(
+      { _id: actionId, userId },
+      { completed, updatedAt: Date.now() },
+      { new: true } // Return the updated document
+    ).lean(); // Use .lean()
 
-      // Re-implement the achievement check logic here.
-      // This logic should be the same as you have it, but we'll capture the result.
+    // This check should technically not be needed due to the check above, but keep for safety
+    if (!updatedAction) {
+      console.error(
+        `Error finding/updating action ${actionId} for user ${userId} after initial check.`
+      );
+      return res.status(500).json({ message: "Failed to update action." });
+    }
 
-      const completedActionsCount = await EcoAction.countDocuments({
+    // --- Achievement Logic (Trigger check after successful completion) ---
+    let newlyAwardedAchievements = []; // Array to store newly awarded achievements
+
+    // Trigger achievement check only when an action is marked as COMPLETED (transition from false to true)
+    if (
+      actionBeforeUpdate.completed === false &&
+      updatedAction.completed === true
+    ) {
+      console.log(
+        `Action ${actionId} marked as completed. Triggering achievement check.`
+      );
+      // Call the general achievement checking function
+      newlyAwardedAchievements = await checkAndAwardAchievements(userId);
+
+      // --- Specific check for actionText criteria based on the completed action ---
+      // This is needed here because the general check doesn't have the context of the specific action text
+      const existingAchievementsNames = await Achievement.find({
         userId,
-        completed: true,
-        suggested: false,
-      }); // Count user-added completed actions
-      const existingAchievements = await Achievement.find({ userId }).distinct(
-        "name"
-      ); // Get names of achievements already earned
+      }).distinct("name"); // Re-fetch names including newly awarded ones
+      const actionTextLower = updatedAction.text.toLowerCase();
 
       for (const achievementDef of achievementDefinitions) {
-        // Check if the user has NOT already earned this achievement
-        if (!existingAchievements.includes(achievementDef.name)) {
-          const { criteria } = achievementDef;
-          let criteriaMet = false;
+        // Check if the user has NOT already earned this achievement AND it's an actionText type
+        if (
+          !existingAchievementsNames.includes(achievementDef.name) &&
+          achievementDef.criteria.type === "actionText" &&
+          achievementDef.criteria.keywords &&
+          achievementDef.criteria.keywords.length > 0
+        ) {
+          const hasKeyword = achievementDef.criteria.keywords.some((keyword) =>
+            actionTextLower.includes(keyword.toLowerCase())
+          );
 
-          // --- Check Criteria ---
-          if (
-            criteria.type === "actionCount" &&
-            completedActionsCount >= criteria.threshold
-          ) {
-            criteriaMet = true;
-          }
-          // Add checks for other criteria types (like actionText) here
-          if (criteria.type === "actionText" && criteria.keywords) {
-            // Check if the completed action's text (or any recent completed action) contains the keywords
-            const actionTextLower = updatedAction.text.toLowerCase();
-            const hasKeyword = criteria.keywords.some((keyword) =>
-              actionTextLower.includes(keyword.toLowerCase())
+          if (hasKeyword) {
+            console.log(
+              `Action ${actionId} text matches keywords for achievement: ${achievementDef.name}. Awarding...`
             );
-            // To be more comprehensive, you might check recent completed actions too
-            // const recentCompletedActions = await EcoAction.find({ userId, completed: true, createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }).lean(); // e.g., last 7 days
-            // const anyRecentHasKeyword = recentCompletedActions.some(action => criteria.keywords.some(keyword => action.text.toLowerCase().includes(keyword.toLowerCase())));
-            if (hasKeyword) {
-              // For simplicity, check only the currently completed action's text
-              criteriaMet = true;
-            }
-          }
-          // Add checks for other criteria types (e.g., streak, total XP, etc.)
-
-          // --- If Criteria Met and Not Already Earned, Award Achievement ---
-          if (criteriaMet) {
             const newAchievement = new Achievement({
               userId,
               name: achievementDef.name,
               description: achievementDef.description,
-              criteria: achievementDef.criteria,
-              badgeImageUrl: achievementDef.badgeImageUrl, // Include image URL
-              tier: achievementDef.tier, // Include tier
-              bonusType: achievementDef.bonusType, // Include bonus type
-              earnedDate: new Date(), // Set earned date
+              badgeFilename: achievementDef.badgeFilename,
+              tier: achievementDef.tier,
+              bonusType: achievementDef.bonusType,
+              earnedDate: new Date(),
             });
             await newAchievement.save();
-            console.log(
-              `Achievement awarded to user ${userId}: ${achievementDef.name}`
-            );
-
-            // --- Capture the awarded achievement ---
-            newlyAwardedAchievement = newAchievement.toObject(); // Convert Mongoose document to plain object
-            // Break loop if you only award one achievement per action completion,
-            // or continue if multiple achievements can be earned by one action.
-            // break; // Uncomment if you only award one per action
+            console.log(`Achievement awarded: ${achievementDef.name}`);
+            newlyAwardedAchievements.push(newAchievement.toObject()); // Add to the list
           }
         }
       }
+      console.log(
+        `Finished specific actionText achievement check. Total newly awarded: ${newlyAwardedAchievements.length}`
+      );
     }
     // If the action was marked incomplete (completed === false) after being true,
     // you might have logic here to potentially remove achievements (less common).
-    // else if (updatedAction.completed === false && completed === false) { ... }
+    // else if (actionBeforeUpdate.completed === true && updatedAction.completed === false) { ... }
 
     console.log("Successfully updated action:", updatedAction);
 
-    // --- Include newly awarded achievement in the response ---
+    // --- Include newly awarded achievements in the response ---
     const responseBody = { updatedAction };
-    if (newlyAwardedAchievement) {
-      responseBody.awardedAchievement = newlyAwardedAchievement;
+    if (newlyAwardedAchievements.length > 0) {
+      responseBody.awardedAchievements = newlyAwardedAchievements; // Use plural name
       console.log(
-        "Response includes awarded achievement:",
-        newlyAwardedAchievement.name
+        "Response includes awarded achievements:",
+        newlyAwardedAchievements.map((ach) => ach.name).join(", ")
       ); // Debug log
     }
 
-    res.status(200).json(responseBody); // Include awardedAchievement in the response
+    res.status(200).json(responseBody); // Include awardedAchievements in the response
   } catch (error) {
     console.error(
       "Error updating eco action and checking achievements:",
@@ -476,7 +563,7 @@ export const getDailyEcoActions = async (req, res) => {
   }
 };
 
-// --- Updated Controller: Get User Achievements (Includes Progress) ---
+// --- Updated Controller: Get User Achievements (Includes Progress for Calculator Usage) ---
 export const getUserAchievements = async (req, res) => {
   try {
     const userId = req.user._id; // Get userId from middleware
@@ -487,15 +574,22 @@ export const getUserAchievements = async (req, res) => {
       `getUserAchievements: Found ${earnedAchievements.length} earned achievements for user ${userId}.`
     ); // Debug log
 
-    // --- Data needed for Progress Calculation ---
-    // For 'actionCount' achievements, we need the total number of completed actions
+    // --- Fetch User Stats needed for Progress Calculation ---
+    // Fetch user document specifically to get calculatorUsesCount
+    const userStats = await User.findById(userId)
+      .select("calculatorUsesCount")
+      .lean();
     const completedActionsCount = await EcoAction.countDocuments({
       userId,
       completed: true,
       suggested: false, // Count only user-added actions
     });
+    // Add fetches for other stats as needed (e.g., forum post count, directory search count)
+
     console.log(
-      `getUserAchievements: User ${userId} has completed ${completedActionsCount} user actions.`
+      `getUserAchievements: User ${userId} has completed ${completedActionsCount} user actions and used calculator ${
+        userStats?.calculatorUsesCount || 0
+      } times.`
     ); // Debug log
 
     // --- Combine Definitions with User Status and Progress ---
@@ -506,23 +600,52 @@ export const getUserAchievements = async (req, res) => {
       const isEarned = !!earned;
 
       const achievementData = {
-        ...definition, // Include all definition properties
+        ...definition, // Include all definition properties (including badgeFilename)
         isEarned: isEarned,
+        // If earned, use the earnedDate from the database record
         earnedDate: isEarned ? earned.earnedDate : null,
+        // If earned, also include the badgeFilename from the database record
+        // This is important if you ever change the filename in definitions but want old records to show the old badge
+        // However, for simplicity now, we'll just use the filename from the definition
+        // If you want to use the filename from the earned record, uncomment the line below
+        // badgeFilename: isEarned ? earned.badgeFilename : definition.badgeFilename,
       };
 
-      // Calculate and include progress for unearned achievements with 'actionCount' criteria
-      if (!isEarned && definition.criteria.type === "actionCount") {
-        achievementData.currentProgress = completedActionsCount; // User's current count of completed actions
-        achievementData.totalNeeded = definition.criteria.threshold; // Threshold from definition
-      } else if (isEarned && definition.criteria.type === "actionCount") {
-        // If earned and actionCount, progress is 100%, can set current to threshold for display
-        achievementData.currentProgress = definition.criteria.threshold;
-        achievementData.totalNeeded = definition.criteria.threshold;
+      // --- Calculate and include progress based on criteria type ---
+      if (!isEarned) {
+        if (definition.criteria.type === "actionCount") {
+          achievementData.currentProgress = completedActionsCount; // User's current count of completed actions
+          achievementData.totalNeeded = definition.criteria.threshold; // Threshold from definition
+        } else if (
+          definition.criteria.type === "calculatorUsage" &&
+          userStats
+        ) {
+          // --- Progress for Calculator Usage ---
+          achievementData.currentProgress = userStats.calculatorUsesCount || 0;
+          achievementData.totalNeeded = definition.criteria.threshold;
+        }
+        // Add progress calculation for other criteria types here (e.g., directoryUsage, forumActivity)
+        // else if (definition.criteria.type === "directoryUsage" && userStats) {
+        //     achievementData.currentProgress = userStats.directorySearchCount || 0;
+        //     achievementData.totalNeeded = definition.criteria.threshold;
+        // }
+        // else if (definition.criteria.type === "forumActivity" && userStats) {
+        //      achievementData.currentProgress = userStats.forumPostCount || 0;
+        //      achievementData.totalNeeded = definition.criteria.threshold;
+        // }
+      } else {
+        // If earned, set progress to 100% (current = total) for display purposes
+        if (
+          definition.criteria.type === "actionCount" ||
+          definition.criteria.type ===
+            "calculatorUsage" /* || other count types */
+        ) {
+          achievementData.currentProgress = definition.criteria.threshold;
+          achievementData.totalNeeded = definition.criteria.threshold;
+        }
+        // For non-count based criteria (like actionText), totalNeeded might not make sense,
+        // so we only set progress for count-based types.
       }
-      // For 'actionText' criteria, progress calculation is not simple like a count,
-      // so we won't add currentProgress/totalNeeded for those initially.
-      // Frontend should check for totalNeeded before trying to render a progress bar.
 
       return achievementData;
     });
@@ -544,7 +667,7 @@ export const getUserAchievements = async (req, res) => {
   }
 };
 
-// --- NEW Controller: Get All Achievement Definitions ---
+// --- Get All Achievement Definitions (Existing) ---
 export const getAchievementDefinitions = async (req, res) => {
   try {
     // Simply return the array of achievement definitions
@@ -772,7 +895,7 @@ export const getWeeklyCompletedActions = async (req, res) => {
     startOfPreviousWeek.setUTCDate(startOfThisWeek.getUTCDate() - 7);
 
     console.log(
-      `Workspaceing completed actions for user ${userId} from ${startOfPreviousWeek} to ${startOfNextWeek}`
+      `Fetching completed actions for user ${userId} from ${startOfPreviousWeek} to ${startOfNextWeek}`
     ); // Debug log
 
     const completedActions = await EcoAction.aggregate([
@@ -871,13 +994,11 @@ export const getCompletedActionsByCategory = async (req, res) => {
     res.status(200).json(categoryBreakdown); // Return the category counts
   } catch (error) {
     console.error("Error getting completed actions by category:", error); // Log error
-    res
-      .status(500)
-      .json({
-        success: false,
-        message:
-          "An internal server error occurred while fetching category breakdown.",
-      });
+    res.status(500).json({
+      success: false,
+      message:
+        "An internal server error occurred while fetching category breakdown.",
+    });
   }
 };
 
@@ -1087,3 +1208,143 @@ export const generateWeeklyReport = async (req, res) => {
     });
   }
 };
+
+// --- NEW Controller: Generate Report by Date Range ---
+export const generateReportByDateRange = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    // Expect startDate and endDate in YYYY-MM-DD format from the request body
+    const { startDate, endDate } = req.body;
+
+    // --- Validate and Parse Dates ---
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        message: "Start date and end date are required.",
+      });
+    }
+
+    // Parse dates as UTC midnight of the selected day
+    const start = new Date(startDate);
+    const end = new Date(endDate); // This will be the start of the end day in UTC
+
+    // Adjust end date to include the entire end day in the query range
+    const endInclusive = new Date(end);
+    endInclusive.setUTCDate(endInclusive.getUTCDate() + 1); // $lt endInclusive will go up to the very start of the next day
+
+    // Check if dates are valid
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid date format." });
+    }
+    // Check if end date is before start date
+    if (start >= endInclusive) {
+      return res.status(400).json({
+        success: false,
+        message: "End date must be after start date.",
+      });
+    }
+
+    console.log(
+      `Generating report for user ${userId} for the period: ${start} to ${endInclusive} (query range)`
+    ); // Debug log
+
+    // --- Fetch Data for the Report within the Specified Date Range ---
+
+    // 1. Completed User Actions within the range
+    const completedActionsInRange = await EcoAction.find({
+      userId,
+      completed: true,
+      suggested: false, // Exclude suggested actions
+      createdAt: {
+        $gte: start,
+        $lt: endInclusive, // Use the adjusted end date for the query
+      },
+    })
+      .sort({ createdAt: 1 })
+      .lean(); // Sort by creation date ascending
+    console.log(
+      `Report: Found ${completedActionsInRange.length} completed actions in range.`
+    ); // Debug log
+
+    // 2. New Achievements Earned within the range
+    const newAchievementsInRange = await Achievement.find({
+      userId,
+      earnedDate: {
+        $gte: start,
+        $lt: endInclusive, // Use the adjusted end date for the query
+      },
+    })
+      .sort({ earnedDate: 1 })
+      .lean(); // Sort by earned date ascending
+    console.log(
+      `Report: Found ${newAchievementsInRange.length} new achievements earned in range.`
+    ); // Debug log
+
+    // Optional: Count completed actions by category within the range
+    const actionsByCategoryInRange = await EcoAction.aggregate([
+      {
+        $match: {
+          userId: new mongoose.Types.ObjectId(userId),
+          completed: true,
+          suggested: false,
+          createdAt: { $gte: start, $lt: endInclusive },
+        },
+      },
+      {
+        $group: {
+          _id: "$category", // Group by the 'category' field
+          count: { $sum: 1 }, // Count documents in each group
+        },
+      },
+      {
+        $project: {
+          // Reshape the output
+          _id: 0, // Exclude the default _id
+          category: "$_id", // Rename _id to category
+          count: 1, // Include the count
+        },
+      },
+    ]);
+    console.log(
+      "Report: Completed actions by category in range:",
+      actionsByCategoryInRange
+    );
+
+    // --- Structure the Report Data ---
+    // The reportPeriod should use the original start and end dates for display
+    const reportData = {
+      reportPeriod: {
+        startDate: start, // Original start date
+        endDate: end, // Original end date for display purposes
+      },
+      summary: {
+        totalCompletedActions: completedActionsInRange.length,
+        actionsByCategory: actionsByCategoryInRange, // Include category breakdown
+      },
+      completedActions: completedActionsInRange, // List of completed actions
+      newAchievements: newAchievementsInRange, // List of new achievements earned
+      // Decide if you want a trend here. A simple count is provided in summary.
+      ecoScoreTrend: null, // Exclude weekly trend for arbitrary range report
+      // Add other data points as needed for the report
+    };
+
+    console.log("Report data generated successfully for date range.");
+
+    res.status(200).json({
+      success: true,
+      message: "Report data generated successfully for selected date range.",
+      report: reportData, // Return the structured report data
+    });
+  } catch (error) {
+    console.error("Error generating report by date range:", error);
+    res.status(500).json({
+      success: false,
+      message:
+        "An internal server error occurred while generating the report for the selected range.",
+    });
+  }
+};
+
+export { getStartOfWeekUTC }; // Keep exporting if used elsewhere

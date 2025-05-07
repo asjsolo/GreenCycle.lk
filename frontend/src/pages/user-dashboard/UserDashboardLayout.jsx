@@ -5,15 +5,25 @@ import MainLayout from "../../Components/Layout/MainLayout";
 import AuthContext from "../../context/AuthContext";
 import "./UserDashboardLayout.css"; // Import the CSS file
 
-function UserDashboardLayout() {
-  const { user, authLoading } = useContext(AuthContext); // Get user from context
+// Import the Achievement Notification components and context
+import AchievementNotification from "../../Components/Common/AchievementNotification";
+import {
+  AchievementNotificationProvider,
+  useAchievementNotification,
+} from "../../context/AchievementNotificationContext";
 
+// --- Component that Renders the Layout and Notification ---
+function UserDashboardLayoutContent() {
+  // Renamed the main component
+  const { user, authLoading } = useContext(AuthContext); // Get user from context
+  const { achievementsToNotify, dismissNotification } =
+    useAchievementNotification(); // Use the notification context
   if (authLoading) {
     return <div className="text-center p-6">Loading dashboard layout...</div>;
   }
 
   return (
-    <MainLayout>
+    <>
       {/* Apply dashboard-container class */}
       <div className="dashboard-container">
         {" "}
@@ -105,8 +115,32 @@ function UserDashboardLayout() {
         {/* You could add another div here with classes like 'dashboard-right-sidebar' */}
         {/* ... */}
       </div>
-    </MainLayout>
+
+      {/* --- Render Achievement Notification --- */}
+      {/* Display the oldest achievement in the queue */}
+      {achievementsToNotify.length > 0 && (
+        <AchievementNotification
+          achievement={achievementsToNotify[0]} // Pass the first achievement in the queue
+          onClose={dismissNotification} // Call dismiss when the notification closes
+        />
+      )}
+    </>
   );
 }
 
+// --- Wrapper Component with MainLayout (AchievementProvider is now higher) ---\r\n
+// This component wraps the layout content with the MainLayout\r\n
+function UserDashboardLayout() {
+  return (
+    <MainLayout>
+      {" "}
+      {/* Keep MainLayout as the outer wrapper */}
+      {/* --- REMOVED: AchievementNotificationProvider is now in index.js --- */}
+      {/* <AchievementNotificationProvider> */}
+      <UserDashboardLayoutContent />{" "}
+      {/* Render the layout content inside MainLayout */}
+      {/* </AchievementNotificationProvider> */}
+    </MainLayout>
+  );
+}
 export default UserDashboardLayout;

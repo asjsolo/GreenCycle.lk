@@ -13,6 +13,7 @@ import {
   getLeaderboard,
   generateWeeklyReport,
   getCompletedActionsByCategory,
+  generateReportByDateRange,
 } from "../controllers/dashboardController.js";
 import userAuth from "../middleware/userAuth.js"; // Import the middleware
 
@@ -45,4 +46,5 @@ router.get("/analytics/category-breakdown", getCompletedActionsByCategory); // G
 router.get("/leaderboard", getLeaderboard); // GET /api/dashboard/leaderboard
 
 router.post("/generate-weekly-report", generateWeeklyReport); // POST /api/dashboard/generate-weekly-report
+router.post("/analytics/report-range", generateReportByDateRange); // POST /api/dashboard/analytics/report-range
 export default router;

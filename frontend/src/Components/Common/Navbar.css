@@ -1,3 +1,4 @@
+/* MADE CSS EDITS */
 * {
   margin: 0;
   padding: 0;
@@ -6,14 +7,16 @@
 .navbar {
   display: flex;
   justify-content: space-between;
-  background: #fff1de;
+  background: #abd1c6;
   padding: 10px 16px;
   margin-bottom: 16px;
 }
 
 .navbar-logo {
-  color: rgb(14, 80, 69);
-  font-size: 20px;
+  color: #004643;
+  font-size: larger;
+  font-weight: bolder;
+  font-family: "Inter", sans-serif;
 }
 
 .navbar-menu {
@@ -23,8 +26,58 @@
   margin: 0;
   align-items: center;
 }
+
 .navbar-menu li a {
   text-decoration: none;
   font-weight: 650;
-  color: #242424;
+  color: #151515;
+}
+
+/* ===== DROPDOWN STYLES ===== */
+.navbar-menu li {
+  position: relative;
+}
+
+.dropdown span {
+  cursor: pointer;
+  font-weight: 650;
+  color: #151515;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 10px 0;
+  min-width: 180px;
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  padding: 8px 16px;
+}
+
+.dropdown-menu li a,
+.dropdown-menu li button {
+  color: #151515;
+  text-decoration: none;
+  font-weight: 600;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
 }

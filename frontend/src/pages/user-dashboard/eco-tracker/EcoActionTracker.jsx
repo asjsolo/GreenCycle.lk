@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import AchievementNotification from "../../../Components/Common/AchievementNotification";
+// frontend/pages/user-dashboard/eco-tracker/EcoActionTracker.jsx
+import React, { useState, useEffect, useRef, useCallback } from "react"; // <<< Import useRef and useCallback
+//import AchievementNotification from "../../../Components/Common/AchievementNotification"; // Assuming this is commented out as per previous steps
+import { useAchievementNotification } from "../../../context/AchievementNotificationContext";
+import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation and useNavigate
 
 // import { useContext } from "react";
 // import AuthContext from "../../context/AuthContext";
@@ -29,12 +32,98 @@ function EcoActionTracker() {
   // Optional: Loading state for individual actions (e.g., completing/deleting/dismissing)
   const [actionLoading, setActionLoading] = useState({}); // State to track loading for specific action IDs
   // const { user } = useContext(AuthContext);
-  const [awardedAchievement, setAwardedAchievement] = useState(null); // State to hold the awarded achievement data
+  const { showAchievementNotification } = useAchievementNotification();
+  //const [awardedAchievement, setAwardedAchievement] = useState(null); // Assuming this is removed as per previous steps
   const hasFetchedInitialData = useRef(false);
+  // --- NEW: Ref to track if suggested action from state has been processed ---
+  const hasProcessedSuggestedAction = useRef(false);
 
-  const [selectedCategory, setSelectedCategory] = useState(actionCategories[0]); // Default to the first category ("General")
+  const [selectedCategory, setSelectedCategory] = useState(actionCategories[0]);
 
-  // --- Fetch Daily Eco Actions (Includes Persisted Suggestions) ---
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // --- Memoize handleAddAction if it's a dependency of useEffect ---
+  // This prevents handleAddAction from changing on every render if its internal
+  // dependencies (like state setters or other unchanging functions) don't change.
+  // It helps stabilize the useEffect dependency array.
+  const handleAddAction = useCallback(
+    async (actionText, actionCategory) => {
+      const text = actionText || newActionText.trim(); // Use provided actionText if available, otherwise use input state
+      // Decide on a category. For tips, you might want a specific category like "Sustainable Alternatives"
+      // For now, we'll default to the selectedCategory from the input, but you could hardcode for tips or pass it in state.
+      const category = actionCategory || selectedCategory; // Use provided category if available, otherwise use selected state
+
+      // Basic frontend validation
+      if (!text) {
+        setError("Action text cannot be empty.");
+        return;
+      }
+
+      setError(null);
+      setAddLoading(true); // Start loading for add button (or just general add operation)
+
+      // Use the selected category, or default to "General" if "General" is selected
+      const categoryToSend = category === "General" ? "General" : category;
+
+      console.log(
+        `Attempting to add user action: "${text}" with category "${categoryToSend}".`
+      );
+
+      try {
+        const response = await fetch("/api/dashboard/eco-actions", {
+          method: "POST", // Use POST for creating a new resource
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // Send the cookie
+          // --- Include selected category in the request body ---
+          body: JSON.stringify({ text, category: categoryToSend }), // Send text AND selected category
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          // If update failed, revert the UI state
+          if (response.status !== 401 && response.status !== 403) {
+            throw new Error(errorData.message || "Failed to add eco action");
+          }
+          console.error(
+            "Add eco action failed due to auth:",
+            response.status,
+            errorData.message
+          );
+          setError(
+            "Authentication required to add action. Please log in again."
+          );
+        } else {
+          const savedAction = await response.json(); // Backend returns the saved action
+          console.log("Successfully added user action:", savedAction); // Debug log
+
+          // Add the new user action to the list
+          // The savedAction object from the backend should now include the category
+          setActions((prevActions) => [...prevActions, savedAction]); // Use functional update
+
+          // Clear input field and reset category ONLY IF the action was added from the input field
+          if (!actionText) {
+            // Check if actionText was NOT provided (meaning it came from the input)
+            setNewActionText(""); // Clear the input field
+            setSelectedCategory(actionCategories[0]); // Reset to "General"
+          }
+
+          // Optional: Show a notification for adding success
+          setNotificationMessage("Action added!");
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+        }
+      } catch (err) {
+        console.error("Error adding eco action:", err);
+        setError("Failed to add new action. Please try again.");
+      } finally {
+        setAddLoading(false); // Stop loading
+      }
+    },
+    [newActionText, selectedCategory, showAchievementNotification]
+  ); // Dependencies for useCallback
+
+  // --- useEffect to fetch daily eco actions ---
   useEffect(
     () => {
       const fetchDailyEcoActions = async () => {
@@ -83,11 +172,11 @@ function EcoActionTracker() {
       // --- NEW: Check ref before fetching ---
       if (!hasFetchedInitialData.current) {
         // Only fetch if initial fetch hasn't happened
-        console.log("EcoActionTracker: Performing initial fetch."); // Debug log
+        console.log("EcoActionTracker: Performing initial fetch in useEffect."); // Debug log
         fetchDailyEcoActions();
       } else {
         console.log(
-          "EcoActionTracker: Skipping initial fetch, data already loaded."
+          "EcoActionTracker: Skipping initial fetch in useEffect, data already loaded."
         ); // Debug log
         // If data is already loaded, ensure loading state is false
         setLoading(false);
@@ -98,14 +187,84 @@ function EcoActionTracker() {
     ]
   ); // Keep dependency array empty
 
-  // --- Handle Checkbox Change (Completing User Actions or Saved Suggestions) ---
-  // Note: Completing a *saved suggestion* now marks the *saved suggestion document* as completed in DB.
-  // This is different from the previous implementation where suggestions weren't saved.
+  // --- useEffect to handle suggested action from navigation state ---
+  useEffect(() => {
+    // Check if there's a suggested action text in the navigation state
+    // --- NEW: Also check if the suggested action has NOT already been processed ---
+    if (
+      location.state?.suggestedActionText &&
+      !hasProcessedSuggestedAction.current
+    ) {
+      console.log(
+        "EcoActionTracker: Found suggested action text in state:",
+        location.state.suggestedActionText
+      );
+      const suggestedText = location.state.suggestedActionText;
+      // You could pass category from the tip in the navigate state as well if needed.
+      // For now, let's assume these tips are related to "Sustainable Alternatives" or "Reduce"
+      const suggestedCategory = "Sustainable Alternatives"; // Or "Reduce", or pass from navigate state
+
+      // --- NEW: Set the ref to true BEFORE adding the action ---
+      // This prevents subsequent renders (caused by state updates like setAddLoading, setActions)
+      // from re-triggering this block of code for the same navigation state.
+      hasProcessedSuggestedAction.current = true;
+      console.log("EcoActionTracker: Marked suggested action as processed.");
+
+      // Call the refactored handleAddAction with the suggested text and category
+      console.log("EcoActionTracker: Calling handleAddAction.");
+      handleAddAction(suggestedText, suggestedCategory); // This triggers state updates and re-renders
+
+      // Clear the state in history AFTER handleAddAction has potentially triggered re-renders
+      // Use setTimeout with 0ms delay to ensure this navigate happens after any
+      // synchronous state updates from handleAddAction are processed.
+      console.log(
+        "EcoActionTracker: Setting timeout to clear navigation state."
+      );
+      const clearStateTimer = setTimeout(() => {
+        console.log(
+          "EcoActionTracker: Timeout fired - clearing navigation state."
+        );
+        navigate(location.pathname, { replace: true, state: {} });
+        console.log("EcoActionTracker: Navigation state cleared.");
+      }, 0); // Use a delay of 0 ms - pushes the navigate to the end of the current event loop
+
+      // --- Cleanup the timeout ---
+      // If the component unmounts or the effect re-runs before the timeout fires,
+      // clear the timeout to avoid calling navigate on an unmounted component.
+      return () => {
+        console.log("EcoActionTracker: Cleaning up clearStateTimer.");
+        clearTimeout(clearStateTimer);
+      };
+    } else {
+      // Optional: Add logs here to see when the condition is NOT met
+      console.log("Suggested action useEffect: Condition not met.");
+      if (location.state?.suggestedActionText) {
+        console.log(
+          "  Reason: suggestedActionText is present, but hasProcessedSuggestedAction.current is true."
+        );
+      } else {
+        console.log(
+          "  Reason: suggestedActionText is not present in location.state."
+        );
+      }
+    }
+
+    // Dependencies for this useEffect:
+    // location.state: We need to react when the navigation state changes
+    // handleAddAction: This function is called inside the effect (made stable with useCallback)
+    // navigate: This function is used inside the effect (stable function from hook)
+    // location.pathname: Used inside the navigate call (stable value)
+    // hasProcessedSuggestedAction.current is NOT a dependency because we don't want
+    // the effect to re-run *just* because we updated the ref. We check its value internally.
+  }, [location.state, handleAddAction, navigate, location.pathname]);
+
+  // --- Handle Checkbox Change ---
   const handleCheckboxChange = async (
     actionId,
     currentCompletedStatus,
     isSuggested
   ) => {
+    // ... (rest of handleCheckboxChange logic) ...
     setActionLoading((prev) => ({ ...prev, [actionId]: true })); // Start loading for this action
 
     // Optimistically update the UI first
@@ -119,12 +278,14 @@ function EcoActionTracker() {
     setError(null); // Clear previous errors
 
     // If it's a suggested action and not completed, handle it locally
+    // Note: You previously had logic here to stop for suggestions.
+    // If completing suggestions should *not* trigger backend achievement checks,
+    // keep this return. If completing suggestions *should* trigger checks,
+    // remove this and let it proceed to the backend call.
     if (isSuggested && !currentCompletedStatus) {
-      // Current logic: Completing a suggestion just marks it completed *locally*
-      // If you want completing a suggestion to award achievements, you'd need to
-      // modify the backend or call handleAddSuggestionAsUserAction here instead.
-      console.log(`Marked suggestion ${actionId} as completed locally.`);
-      // Optional: Show a different notification for completing a suggestion.
+      console.log(
+        `handleCheckboxChange: Marked suggestion ${actionId} as completed locally.`
+      );
       setNotificationMessage("Suggestion completed!");
       setShowNotification(true);
       setTimeout(() => setShowNotification(false), 3000);
@@ -132,11 +293,11 @@ function EcoActionTracker() {
         delete prev[actionId];
         return { ...prev };
       });
-      return; // Stop here for suggestions
+      return; // Stop here for suggestions if they shouldn't trigger backend
     } else {
       // It's a regular user action OR a suggested action being marked incomplete again
       console.log(
-        `Updating action ${actionId} completion status to ${!currentCompletedStatus}.`
+        `handleCheckboxChange: Updating action ${actionId} completion status to ${!currentCompletedStatus}.`
       ); // Debug log
 
       try {
@@ -164,7 +325,7 @@ function EcoActionTracker() {
             throw new Error(errorData.message || "Failed to update eco action");
           }
           console.error(
-            "Update eco action failed due to auth:",
+            "handleCheckboxChange: Update eco action failed due to auth:",
             response.status,
             errorData.message
           );
@@ -175,17 +336,17 @@ function EcoActionTracker() {
           // Success (status 200 OK)
           const data = await response.json(); // Backend returns { updatedAction, awardedAchievement? }
           console.log(
-            "Successfully updated action and checked achievements:",
+            "handleCheckboxChange: Successfully updated action and checked achievements:",
             data
           ); // Debug log
 
-          // --- Check if an achievement was awarded ---
-          if (data.awardedAchievement) {
+          // --- Check for awarded achievements array and use context ---
+          if (data.awardedAchievements && data.awardedAchievements.length > 0) {
             console.log(
-              "Achievement awarded in backend response:",
-              data.awardedAchievement.name
-            ); // Debug log
-            setAwardedAchievement(data.awardedAchievement); // Set state to display notification
+              "handleCheckboxChange: Achievements awarded in backend response:",
+              data.awardedAchievements.map((ach) => ach.name).join(", ")
+            );
+            showAchievementNotification(data.awardedAchievements); // Use context
           } else {
             // Show a generic success notification if no achievement was awarded
             setNotificationMessage("Great job! You're making a difference!");
@@ -214,7 +375,7 @@ function EcoActionTracker() {
         // If a suggestion was completed, should it remain on the list? Yes, marked as completed.
         // If it was a user action, it remains marked as completed.
       } catch (err) {
-        console.error("Error updating eco action:", err);
+        console.error("handleCheckboxChange: Error updating eco action:", err);
         setError("Failed to update action. Please try again.");
         // Optimistic update is reverted in the catch block above this
       } finally {
@@ -225,90 +386,25 @@ function EcoActionTracker() {
       }
     }
   };
-  // --- Function to close Achievement Notification ---
-  const handleCloseAchievementNotification = () => {
-    setAwardedAchievement(null); // Clear the state to hide the notification
-    console.log("Achievement notification closed."); // Debug log
-  };
 
   // --- Handle Adding a New Action (From Input Field) ---
-  // This now ONLY handles adding from the input field.
-  const handleAddAction = async () => {
-    const text = newActionText.trim();
-
-    // Basic frontend validation
-    if (!text) {
-      setError("Action text cannot be empty.");
-      return;
-    }
-
-    setError(null);
-    setAddLoading(true); // Start loading for add button
-
-    // --- Use the selected category, or default to "General" if "General" is selected ---
-    // The backend already handles defaulting if category is not provided,
-    // but sending "General" explicitly is also fine if that's the default option.
-    const categoryToSend =
-      selectedCategory === "General" ? "General" : selectedCategory;
-
-    console.log(
-      `Attempting to add user action from input: "${text}" with category "${categoryToSend}".`
-    );
-
-    try {
-      const response = await fetch("/api/dashboard/eco-actions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        // --- Include selected category in the request body ---
-        body: JSON.stringify({ text, category: categoryToSend }), // Send text AND selected category
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status !== 401 && response.status !== 403) {
-          throw new Error(errorData.message || "Failed to add eco action");
-        }
-        console.error(
-          "Add eco action failed due to auth:",
-          response.status,
-          errorData.message
-        );
-        setError("Authentication required to add action. Please log in again.");
-      } else {
-        const savedAction = await response.json(); // Backend returns the saved action
-        console.log("Successfully added user action:", savedAction); // Debug log
-
-        // Add the new user action to the list
-        // The savedAction object from the backend should now include the category
-        setActions((prevActions) => [...prevActions, savedAction]); // Use functional update
-        setNewActionText(""); // Clear the input field
-
-        // --- NEW: Reset selected category to default after adding ---
-        setSelectedCategory(actionCategories[0]); // Reset to "General"
-
-        // Optional: Show a notification for adding success
-        setNotificationMessage("Action added!");
-        setShowNotification(true);
-        setTimeout(() => setShowNotification(false), 3000);
-      }
-    } catch (err) {
-      console.error("Error adding eco action:", err);
-      setError("Failed to add new action. Please try again.");
-    } finally {
-      setAddLoading(false);
-    }
+  const handleAddActionFromInput = () => {
+    console.log("handleAddActionFromInput called."); // Log when input handler is called
+    handleAddAction(); // Calls handleAddAction using the state variables
   };
 
   // --- Handle Adding a Suggestion as a User Action ---
   const handleAddSuggestionAsUserAction = async (suggestionAction) => {
-    // Accepts the suggestion action object
+    console.log(
+      "handleAddSuggestionAsUserAction called for:",
+      suggestionAction.text
+    ); // Log when this handler is called
     setError(null);
-    setActionLoading((prev) => ({ ...prev, [suggestionAction._id]: true })); // Start loading for the suggestion item
+    setActionLoading((prev) => ({ ...prev, [suggestionAction._id]: true }));
 
     console.log(
-      `Attempting to add suggestion "${suggestionAction.text}" as user action.`
-    ); // Debug log
+      `handleAddSuggestionAsUserAction: Attempting to add suggestion "${suggestionAction.text}" as user action.`
+    );
 
     try {
       // Make a POST call to create a *new* user action based on the suggestion text
@@ -316,7 +412,10 @@ function EcoActionTracker() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ text: suggestionAction.text }), // Send the suggestion text
+        body: JSON.stringify({
+          text: suggestionAction.text,
+          category: suggestionAction.category,
+        }), // Send the suggestion text and category
       });
 
       if (!addResponse.ok) {
@@ -328,31 +427,28 @@ function EcoActionTracker() {
           );
         }
         console.error(
-          "Add suggestion as user action failed due to auth:",
+          "handleAddSuggestionAsUserAction: Add suggestion as user action failed due to auth:",
           addResponse.status,
           errorData.message
         );
         setError("Authentication required to add action. Please log in again.");
-        // Stop here if adding the user action failed
         setActionLoading((prev) => {
           delete prev[suggestionAction._id];
           return { ...prev };
-        }); // Stop loading
+        });
         return;
       }
 
       const newUserAction = await addResponse.json(); // Backend returns the newly created user action
       console.log(
-        "Successfully added suggestion as user action:",
+        "handleAddSuggestionAsUserAction: Successfully added suggestion as user action:",
         newUserAction
-      ); // Debug log
+      );
 
-      // --- NEW: Call backend to dismiss the original suggestion ---
-      // We call the DELETE endpoint, and the backend's deleteEcoAction controller
-      // knows to mark suggestions as dismissed instead of deleting.
+      // --- Call backend to dismiss the original suggestion ---
       console.log(
-        `Attempting to dismiss original suggestion ${suggestionAction._id} after adding.`
-      ); // Debug log
+        `handleAddSuggestionAsUserAction: Attempting to dismiss original suggestion ${suggestionAction._id} after adding.`
+      );
       const dismissResponse = await fetch(
         `/api/dashboard/eco-actions/${suggestionAction._id}`,
         {
@@ -365,13 +461,13 @@ function EcoActionTracker() {
       if (!dismissResponse.ok) {
         // If dismissing fails, log an error but don't prevent adding the user action
         console.error(
-          `Failed to dismiss original suggestion ${suggestionAction._id} after adding. It might reappear.`
+          `handleAddSuggestionAsUserAction: Failed to dismiss original suggestion ${suggestionAction._id} after adding. It might reappear.`
         );
         // The user action was still added successfully, so continue with UI update
       } else {
         console.log(
-          `Successfully dismissed original suggestion ${suggestionAction._id} after adding.`
-        ); // Debug log
+          `handleAddSuggestionAsUserAction: Successfully dismissed original suggestion ${suggestionAction._id} after adding.`
+        );
         // Backend confirmed dismissal, no need to do additional local state update for dismissal here
         // The filter below will remove it anyway.
       }
@@ -390,7 +486,7 @@ function EcoActionTracker() {
     } catch (err) {
       // This catch now primarily handles errors from the initial addResponse fetch
       console.error(
-        "Error adding suggestion as user action or dismissing original:",
+        "handleAddSuggestionAsUserAction: Error adding suggestion as user action or dismissing original:",
         err
       );
       setError(
@@ -400,17 +496,19 @@ function EcoActionTracker() {
       setActionLoading((prev) => {
         delete prev[suggestionAction._id];
         return { ...prev };
-      }); // Stop loading
+      });
     }
   };
 
   // --- Handle Deleting/Dismissing an Action ---
   const handleDeleteAction = async (actionId, isSuggested) => {
-    // Added isSuggested parameter
+    console.log(
+      `handleDeleteAction called for ID: ${actionId}, suggested: ${isSuggested}`
+    ); // Log when handler is called
     setError(null);
     // Optional: Add a confirmation dialog here
 
-    setActionLoading((prev) => ({ ...prev, [actionId]: true })); // Start loading for this action
+    setActionLoading((prev) => ({ ...prev, [actionId]: true }));
 
     try {
       // Call the backend endpoint to delete user action or dismiss suggestion
@@ -431,7 +529,7 @@ function EcoActionTracker() {
           );
         }
         console.error(
-          `${
+          `handleDeleteAction: ${
             isSuggested ? "Dismiss suggestion" : "Delete action"
           } failed due to auth:`,
           response.status,
@@ -446,7 +544,9 @@ function EcoActionTracker() {
         // Success (status 200 OK)
         const data = await response.json(); // Backend returns { actionId, deleted: true } or { actionId, dismissed: true }
         console.log(
-          `${isSuggested ? "Suggestion dismissed" : "User action deleted"}:`,
+          `handleDeleteAction: ${
+            isSuggested ? "Suggestion dismissed" : "User action deleted"
+          }:`,
           data
         ); // Debug log
 
@@ -468,7 +568,7 @@ function EcoActionTracker() {
       }
     } catch (err) {
       console.error(
-        `Error ${
+        `handleDeleteAction: Error ${
           isSuggested ? "dismissing suggestion" : "deleting eco action"
         }:`,
         err
@@ -482,7 +582,7 @@ function EcoActionTracker() {
       setActionLoading((prev) => {
         delete prev[actionId];
         return { ...prev };
-      }); // Stop loading
+      });
     }
   };
 
@@ -505,10 +605,8 @@ function EcoActionTracker() {
     <div className="p-6 bg-white rounded shadow">
       <h2 className="text-xl font-semibold mb-4">Today's Eco Actions</h2>
 
-      {/* Display error message */}
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
-      {/* Action List */}
       {actions.length === 0 ? (
         <p className="text-gray-500">
           No actions for today yet. Add one below!
@@ -516,7 +614,6 @@ function EcoActionTracker() {
       ) : (
         <ul>
           {actions.map((action) => (
-            // Add a class to distinguish suggestions and maybe completed items
             <li
               key={action._id}
               className={`flex items-center justify-between py-2 border-b last:border-b-0
@@ -525,11 +622,10 @@ function EcoActionTracker() {
                    !action.suggested && action.completed
                      ? "bg-green-50 border-green-200"
                      : ""
-                 } {/* Optional: Highlight completed user actions */}
+                 }
               `}
             >
               <div className="flex items-center">
-                {/* Checkbox: Only show for user actions */}
                 {!action.suggested && (
                   <input
                     type="checkbox"
@@ -542,7 +638,7 @@ function EcoActionTracker() {
                         action.suggested
                       )
                     }
-                    disabled={actionLoading[action._id]} // Disable checkbox while loading
+                    disabled={actionLoading[action._id]}
                   />
                 )}
 
@@ -552,14 +648,12 @@ function EcoActionTracker() {
                   } ${action.suggested ? "italic text-gray-700" : ""}`}
                 >
                   {action.text}
-                  {/* Optional: Label suggestions */}
                   {action.suggested && (
                     <span className="ml-2 text-xs font-semibold text-yellow-700">
                       {" "}
                       (Suggestion)
                     </span>
                   )}
-                  {/* Optional: Show creation date for older incomplete items */}
                   {!action.completed &&
                     !action.suggested &&
                     action.createdAt &&
@@ -573,37 +667,34 @@ function EcoActionTracker() {
                 </span>
               </div>
 
-              {/* Action Buttons (Delete or Add/Dismiss for suggestions) */}
               <div className="flex items-center">
                 {action.suggested ? (
-                  // Buttons for Suggestions
                   <>
                     <button
-                      onClick={() => handleAddSuggestionAsUserAction(action)} // Pass the whole suggestion action object
+                      onClick={() => handleAddSuggestionAsUserAction(action)}
                       className="text-blue-500 hover:text-blue-700 ml-4 text-sm"
-                      disabled={actionLoading[action._id] || addLoading} // Disable if this action is loading or general add is loading
+                      disabled={actionLoading[action._id] || addLoading}
                     >
                       {actionLoading[action._id] ? "Adding..." : "Add Action"}
                     </button>
                     <button
                       onClick={() =>
                         handleDeleteAction(action._id, action.suggested)
-                      } // Pass action ID and isSuggested
+                      }
                       className="text-red-500 hover:text-red-700 ml-2 text-sm"
-                      disabled={actionLoading[action._id]} // Disable if this action is loading
+                      disabled={actionLoading[action._id]}
                     >
                       {actionLoading[action._id] ? "Dismissing..." : "Dismiss"}
                     </button>
                   </>
                 ) : (
-                  // Buttons for User Actions (Delete)
                   <button
                     onClick={() =>
                       handleDeleteAction(action._id, action.suggested)
-                    } // Pass action ID and isSuggested (will be false)
+                    }
                     className="text-red-500 hover:text-red-700 ml-4 text-sm"
                     aria-label={`Delete action: ${action.text}`}
-                    disabled={actionLoading[action._id]} // Disable if this action is loading
+                    disabled={actionLoading[action._id]}
                   >
                     {actionLoading[action._id] ? "Deleting..." : "Delete"}
                   </button>
@@ -614,59 +705,50 @@ function EcoActionTracker() {
         </ul>
       )}
 
-      {/* Add New Action Input Form with Category Dropdown */}
       <div className="mt-4 flex items-center gap-2">
-        {" "}
-        {/* Added gap-2 */}
-        {/* Input field */}
         <input
           type="text"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow" // Added flex-grow
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow"
           placeholder="Add a new eco action"
           value={newActionText}
           onChange={(e) => setNewActionText(e.target.value)}
           disabled={addLoading}
           onKeyPress={(e) => {
             if (e.key === "Enter" && newActionText.trim() && !addLoading) {
-              handleAddAction();
+              handleAddActionFromInput();
             }
           }}
         />
-        {/* Category Dropdown */}
         <select
           className="shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
           disabled={addLoading}
         >
-          {/* Map through the actionCategories array to create options */}
           {actionCategories.map((category) => (
             <option key={category} value={category}>
               {category}
             </option>
           ))}
         </select>
-        {/* Add Button */}
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => handleAddAction()}
+          onClick={handleAddActionFromInput}
           disabled={!newActionText.trim() || addLoading}
         >
           {addLoading ? "Adding..." : "Add"}
         </button>
       </div>
 
+      {/* Keep the generic notification if you still need it */}
       {showNotification && (
-        <div className="absolute bottom-4 right-4 w-64 p-3 bg-green-200 text-green-700 rounded-md shadow-lg transition-opacity duration-500 opacity-100 z-50">
+        <div className="absolute bottom-4 right-4 w-64 p-3 bg-yellow-200 text-black-700 rounded-md shadow-lg transition-opacity duration-500 opacity-100 z-50">
           {" "}
           {notificationMessage}
         </div>
       )}
 
-      <AchievementNotification
-        achievement={awardedAchievement}
-        onClose={handleCloseAchievementNotification}
-      />
+      {/* <AchievementNotification... */}
     </div>
   );
 }

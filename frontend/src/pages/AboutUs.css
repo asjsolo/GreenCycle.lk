@@ -6,6 +6,7 @@
   font-family: "Inter", sans-serif; /* Ensure font consistency */
   max-width: 900px; /* Limit content width */
   margin: 0 auto; /* Center the content */
+  background: #abd1c6;
 }
 
 .about-us-page section {
@@ -21,13 +22,13 @@
 .about-us-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #fff1de;
+  color: #001e1d;
   margin-bottom: 15px;
 }
 
 .about-us-header p {
   font-size: 1.1rem;
-  color: #fff1de;
+  color: #0f3433;
   max-width: 700px;
   margin: 0 auto;
 }
@@ -40,7 +41,7 @@
   font-weight: 600;
   color: #242424; /* Medium blue */
   margin-bottom: 20px;
-  border-bottom: 2px solid #fff1de; /* Subtle underline */
+  border-bottom: 2px solid #71a194; /* Subtle underline */
   padding-bottom: 10px;
 }
 
@@ -48,7 +49,7 @@
 .about-us-story p {
   font-size: 1rem;
   line-height: 1.6;
-  color: #fff1de;
+  color: #0f3433;
   margin-bottom: 15px;
 }
 

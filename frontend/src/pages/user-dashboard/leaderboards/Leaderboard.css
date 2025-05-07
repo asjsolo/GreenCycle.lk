@@ -1,0 +1,54 @@
+.leaderboard-page {
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.leaderboard-rank-cell {
+  text-align: center;
+  font-weight: bold;
+  width: 50px;
+}
+
+.leaderboard-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leaderboard-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.leaderboard-action-count {
+  text-align: right;
+  font-weight: 500;
+}
+
+.leaderboard-highlight {
+  background-color: #e0f0ff;
+  font-weight: bold;
+}

@@ -1,3 +1,4 @@
+//MADE CSS EDITS
 // frontend/pages/auth/ResetPassword.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +92,7 @@ function ResetPassword() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="email">Email</label>
             <input
@@ -104,7 +105,7 @@ function ResetPassword() {
               placeholder="Enter your email"
             />
           </div>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="otp">OTP</label>
             <input
@@ -121,7 +122,7 @@ function ResetPassword() {
               title="Please enter a 6-digit code"
             />
           </div>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="newPassword">New Password</label>
             <input

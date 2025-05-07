@@ -13,9 +13,11 @@ const achievementSchema = new mongoose.Schema(
       required: true,
       // Examples: "Eco-Newbie", "Green Warrior", "First Action Completed", "Zero-Waste Hero"
     },
-    badgeImageUrl: {
+    // --- UPDATED: Store just the filename, not a full URL ---
+    badgeFilename: {
       type: String,
-      // URL to the image for the badge
+      required: true, // Make filename required
+      // Examples: "eco-newbie.png", "green-warrior_grey.png"
     },
     description: {
       type: String,

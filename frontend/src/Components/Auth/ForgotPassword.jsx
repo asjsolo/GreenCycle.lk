@@ -1,3 +1,4 @@
+//MADE CSS EDITS
 // frontend/pages/auth/ForgotPassword.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -66,7 +67,7 @@ function ForgotPassword() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="email">Email</label>
             <input

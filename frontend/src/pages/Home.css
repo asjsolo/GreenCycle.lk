@@ -1,3 +1,4 @@
+/* MADE CSS EDITS */
 /* frontend/pages/Home.css */
 
 /* Basic styling for the home page container */
@@ -7,14 +8,14 @@
   font-family: "Inter", sans-serif; /* Ensure font consistency */
 }
 
+.hero-image {
+  padding-top: 50px;
+}
+
 /* Hero Section Styling */
-.hero-section {
-  background: linear-gradient(
-    to right,
-    #a7f3d0,
-    #34d399
-  ); /* Example gradient background */
-  color: #104e37; /* Dark green text */
+.home-hero-section {
+  background: #abd1c6; /* Example gradient background */
+  color: #004643; /* Dark green text */
   padding: 60px 20px; /* Padding top/bottom and sides */
   text-align: center; /* Center content */
   display: flex; /* Use flexbox for potential image/content layout */
@@ -23,13 +24,13 @@
   justify-content: center; /* Center content vertically */
 }
 
-.hero-content h1 {
+.home-hero-content h1 {
   font-size: 2.5rem; /* Large heading */
   margin-bottom: 20px;
   font-weight: 700; /* Bold */
 }
 
-.hero-content p {
+.home-hero-content p {
   font-size: 1.2rem;
   margin-bottom: 30px;
   max-width: 800px; /* Limit width for readability */
@@ -37,29 +38,30 @@
   margin-right: auto;
 }
 
-.cta-button {
+.home-cta-button {
   display: inline-block; /* Make it block-like for padding/margin */
-  background-color: #10b981; /* Green color */
-  color: white;
+  color: #004643;
   padding: 12px 25px;
   border-radius: 8px;
+  border: 3px solid #0c110f; /* Green border */
   text-decoration: none; /* Remove underline */
   font-size: 1.1rem;
   font-weight: 600;
   transition: background-color 0.3s ease;
 }
 
-.cta-button:hover {
+.home-cta-button:hover {
   background-color: #059669; /* Darker green on hover */
+  color: #ecf0f1;
 }
 
-.cta-button.secondary {
+.home-cta-button.secondary {
   background-color: transparent; /* Transparent background for secondary CTA */
-  color: #104e37; /* Dark green text */
-  border: 2px solid #10b981; /* Green border */
+  color: #ecf0f1; /* Dark green text */
+  border: 3px solid #0c110f; /* Green border */
 }
 
-.cta-button.secondary:hover {
+.home-cta-button.secondary:hover {
   background-color: rgba(
     16,
     185,
@@ -69,20 +71,20 @@
 }
 
 /* Features Section Styling */
-.features-section {
+.home-features-section {
   padding: 60px 20px;
   text-align: center;
-  background-color: #f0f9ff; /* Light blue background */
+  background-color: #ecf0f1; /* Light blue background */
 }
 
-.features-section h2 {
+.home-features-section h2 {
   font-size: 2rem;
   margin-bottom: 40px;
   color: #0c4a6e; /* Dark blue */
   font-weight: 700;
 }
 
-.features-grid {
+.home-features-grid {
   display: grid; /* Use grid for layout */
   grid-template-columns: repeat(
     auto-fit,
@@ -93,7 +95,7 @@
   margin: 0 auto; /* Center the grid */
 }
 
-.feature-item {
+.home-feature-item {
   background-color: #fff; /* White background for each feature card */
   padding: 25px;
   border-radius: 8px;
@@ -101,33 +103,33 @@
   text-align: left; /* Align text left within the card */
 }
 
-.feature-item h3 {
+.home-feature-item h3 {
   font-size: 1.3rem;
   margin-bottom: 10px;
   color: #075985; /* Medium blue */
   font-weight: 600;
 }
 
-.feature-item p {
+.home-feature-item p {
   font-size: 1rem;
   color: #333;
 }
 
 /* Call to Action Section Styling */
-.cta-section {
-  background-color: #065f46; /* Dark green background */
+.home-cta-section {
+  background-color: #004643; /* Dark green background */
   color: white;
   padding: 60px 20px;
   text-align: center;
 }
 
-.cta-section h2 {
+.home-cta-section h2 {
   font-size: 2rem;
   margin-bottom: 20px;
   font-weight: 700;
 }
 
-.cta-section p {
+.home-cta-section p {
   font-size: 1.1rem;
   margin-bottom: 30px;
 }
@@ -137,16 +139,16 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .hero-content h1 {
+  .home-hero-content h1 {
     font-size: 2rem;
   }
-  .hero-content p {
+  .home-hero-content p {
     font-size: 1rem;
   }
-  .features-section h2 {
+  .home-features-section h2 {
     font-size: 1.8rem;
   }
-  .cta-section h2 {
+  .home-cta-section h2 {
     font-size: 1.8rem;
   }
 }

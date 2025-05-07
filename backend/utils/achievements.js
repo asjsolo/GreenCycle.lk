@@ -5,63 +5,74 @@ export const achievementDefinitions = [
     name: "Eco-Newbie",
     description: "Completed 5 eco actions.",
     criteria: { type: "actionCount", threshold: 5 },
-    badgeImageUrl: "/images/badges/eco-newbie.png", // Placeholder URL
+    badgeFilename: "eco-newbie.png", // Placeholder URL
     tier: "Bronze",
   },
   {
     name: "Green Warrior",
     description: "Completed 25 eco actions.",
     criteria: { type: "actionCount", threshold: 25 },
-    badgeImageUrl: "/images/badges/green-warrior.png", // Placeholder URL
+    badgeFilename: "green-warrior.png", // Placeholder URL
     tier: "Silver",
   },
   {
     name: "Eco-Champion",
     description: "Completed 100 eco actions.",
     criteria: { type: "actionCount", threshold: 100 },
-    badgeImageUrl: "/images/badges/eco-champion.png", // Placeholder URL
+    badgeFilename: "eco-champion.png", // Placeholder URL
     tier: "Gold",
   },
   {
     name: "Recycling Ranger",
     description: "Added an action related to recycling.",
     criteria: { type: "actionText", keywords: ["recycle", "recycling"] },
-    badgeImageUrl: "/images/badges/recycling-ranger.png", // Placeholder URL
+    badgeFilename: "recycling-ranger.png", // Placeholder URL
     bonusType: "Recycling",
   },
   {
-    name: "Transportation Trailblazer",
-    description: "Added an action related to sustainable transportation.",
+    name: "First Step",
+    description: "Completed your very first eco action.",
+    criteria: { type: "actionCount", threshold: 1 }, // Earned after 1 completed action
+    badgeFilename: "first-step.png", // New badge image needed
+    tier: "Bronze", // Or a special tier like "Intro"
+  },
+  {
+    name: "Plastic Reductionist",
+    description: "Logged 5 actions related to reducing single-use plastic.",
     criteria: {
       type: "actionText",
-      keywords: ["walk", "bike", "public transport", "carpool"],
-    },
-    badgeImageUrl: "/images/badges/transportation-trailblazer.png", // Placeholder URL
-    bonusType: "Transportation",
+      keywords: [
+        "reusable bag",
+        "reusable bottle",
+        "refuse straw",
+        "avoid plastic",
+        "plastic-free",
+      ],
+    }, // Keywords for action text
+    badgeFilename: "plastic-reductionist.png", // New badge image needed
+    bonusType: "Reduction", // New bonus type
   },
   {
-    name: "Energy Saver",
-    description: "Added an action related to saving energy.",
-    criteria: {
-      type: "actionText",
-      keywords: ["energy", "electricity", "power"],
-    },
-    badgeImageUrl: "/images/badges/energy-saver.png", // Placeholder URL
-    bonusType: "Energy",
+    name: "Community Builder",
+    description: "Made 3 posts or comments in the Community Forum.",
+    criteria: { type: "forumActivity", threshold: 3 }, // Requires tracking forum posts/comments
+    badgeFilename: "community-builder.png", // New badge image needed
+    bonusType: "Community", // New bonus type
+  },
+  // --- NEW Achievements ---
+  {
+    name: "Plastic Footprint Master",
+    description: "Used the Plastic Footprint Calculator 5 times.",
+    criteria: { type: "calculatorUsage", threshold: 5 }, // Requires tracking calculator uses
+    badgeFilename: "calculator-master.png", // New badge image needed
+    tier: "Silver",
   },
   {
-    name: "Water Wise",
-    description: "Added an action related to conserving water.",
-    criteria: { type: "actionText", keywords: ["water"] },
-    badgeImageUrl: "/images/badges/water-wise.png", // Placeholder URL
-    bonusType: "Water",
-  },
-  {
-    name: "Zero-Waste Hero",
-    description: "Added an action related to zero waste or composting.",
-    criteria: { type: "actionText", keywords: ["zero waste", "compost"] },
-    badgeImageUrl: "/images/badges/zero-waste-hero.png", // Placeholder URL
-    bonusType: "Zero-Waste",
+    name: "Directory Explorer",
+    description: "Found 3 recycling centers using the Directory.",
+    criteria: { type: "directoryUsage", threshold: 3 }, // Requires tracking directory searches/views
+    badgeFilename: "directory-explorer.png", // New badge image needed
+    tier: "Bronze",
   },
   // Add more achievements here
 ];

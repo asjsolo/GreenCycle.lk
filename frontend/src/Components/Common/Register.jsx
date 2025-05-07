@@ -1,3 +1,4 @@
+//MADE CSS EDITS & REMOVED AGE FIELD
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Auth/AuthForms.css"; // Import the common CSS file
@@ -58,25 +59,8 @@ function Register() {
           <p className="auth-message success">{successMessage}</p>
         )}
         <form onSubmit={handleRegistration}>
-          {/* Add Age field placeholder/info - Image shows this */}
-          {/* You might want to add a real input for age later */}
-          <div className="form-group">
-            <label htmlFor="age">Age</label>
-            <input
-              type="text"
-              id="age"
-              placeholder="Age"
-              disabled={true}
-            />{" "}
-            {/* Placeholder, disabled for now */}
-            <p className="text-xs text-gray-400 mt-1 text-left">
-              Providing your age ensures you get the right experience. For more
-              details, please visit our Privacy Policy.{" "}
-              {/* Example info text */}
-            </p>
-          </div>
-
-          <div className="form-group">
+          {/*REMOVED AGE FIELD HERE*/}
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="name">Name (optional)</label>
             <input
@@ -88,7 +72,7 @@ function Register() {
               placeholder="Name (optional)"
             />
           </div>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="email">Email</label>
             <input
@@ -101,7 +85,7 @@ function Register() {
               placeholder="Email"
             />
           </div>
-          <div className="form-group">
+          <div className="auth-form-group">
             {/* Visually hidden label */}
             <label htmlFor="password">Password</label>
             <input

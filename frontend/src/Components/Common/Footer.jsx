@@ -23,13 +23,27 @@ function Footer() {
               <Link to="/">Home</Link>
             </li>
             {/* Add links to other public pages if they exist */}
-            {/* <li><Link to="/about-us">About Us</Link></li> */}
-            {/* <li><Link to="/contact-us">Contact Us</Link></li> */}
-            {/* <li><Link to="/plasticFootprintCalculator">Calculator</Link></li> */}
-            {/* <li><Link to="/awareness-hub">Awareness Hub</Link></li> */}
-            {/* <li><Link to="/recycling-directory">Directory</Link></li> */}
-            {/* <li><Link to="/community-forum">Forum</Link></li> */}
-            {/* Link to Login/Register if not logged in, or Dashboard if logged in (handled by Navbar, but can repeat here) */}
+            <li>
+              <Link to="/about-us">About Us</Link>
+            </li>
+            <li>
+              <Link to="/contact-us">Contact Us</Link>
+            </li>
+            <li>
+              <Link to="/plasticFootprintCalculator">Calculator</Link>
+            </li>
+            <li>
+              <Link to="/awareness-hub">Awareness Hub</Link>
+            </li>
+            <li>
+              <Link to="/recycling-directory">Directory</Link>
+            </li>
+            <li>
+              <Link to="/community-forum">Forum</Link>
+            </li>
+
+            {/*Link to Login/Register if not logged in, or Dashboard if logged in
+            (handled by Navbar, but can repeat here)
             {/* <li><Link to="/login">Login</Link></li> */}
             {/* <li><Link to="/register">Register</Link></li> */}
           </ul>
@@ -49,11 +63,11 @@ function Footer() {
         </div>
 
         {/* Optional: Add a Contact Info or Social Media section */}
-        {/* <div className="footer-section contact-info">
-            <h4>Contact Us</h4>
-            <p>Email: info@greencycle.lk</p>
-            <p>Phone: (123) 456-7890</p>
-        </div> */}
+        <div className="footer-section contact-info">
+          <h4>Contact Us</h4>
+          <p>Email: info@greencycle.lk</p>
+          <p>Phone: (123) 456-7890</p>
+        </div>
 
         {/* Optional: Social Media Icons */}
         {/* <div className="footer-section social-media">
