@@ -20,6 +20,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { FiTrash2 } from "react-icons/fi"; // Example icon import
+
 function PlasticFootprintCalculator() {
   const { user, isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -46,6 +48,9 @@ function PlasticFootprintCalculator() {
   const [history, setHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [historyError, setHistoryError] = useState(null);
+
+  // --- NEW: State for loading state of individual delete buttons ---
+  const [deletingId, setDeletingId] = useState(null); // To track which item is being deleted
 
   // --- State for Monthly Limit and Current Usage ---
   const [monthlyLimit, setMonthlyLimit] = useState(null);
@@ -561,6 +566,53 @@ function PlasticFootprintCalculator() {
     }
   };
 
+  // --- NEW: Handle Delete Usage Record ---
+  const handleDeleteUsage = async (usageId) => {
+    // Ask for user confirmation before deleting
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this plastic usage record?"
+    );
+    if (!isConfirmed) {
+      return; // Stop if the user cancels the confirmation
+    }
+
+    setDeletingId(usageId); // Set the loading state for this specific item
+    console.log(`Attempting to delete usage record with ID: ${usageId}`);
+
+    try {
+      // Call the new backend DELETE endpoint
+      const response = await fetch(`/api/footprint/history/${usageId}`, {
+        // Use template literal for ID
+        method: "DELETE", // Use the DELETE HTTP method
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // Send cookies for authentication
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete record.");
+      }
+
+      const data = await response.json();
+      console.log("Delete successful:", data);
+
+      // --- Update Frontend State ---
+      // Remove the deleted item from the history state without needing to refetch all history
+      setHistory((prevHistory) =>
+        prevHistory.filter((record) => record._id !== usageId)
+      );
+
+      // Optional: Show a success message to the user
+      alert(data.message || "Record deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting usage record:", error);
+      // Optional: Show an error message to the user
+      alert(`Error: ${error.message}`);
+    } finally {
+      setDeletingId(null); // Clear the loading state
+    }
+  };
+
   return (
     <MainLayout>
       <div className="plastic-calculator-home-container">
@@ -692,7 +744,7 @@ function PlasticFootprintCalculator() {
               </div>
             )}
 
-            {/* --- History Tab Content --- */}
+            {/* --- History Tab Content (MODIFIED) --- */}
             {activeTab === "history" && (
               <div className="tab-panel history-panel">
                 {/* Plastic Usage History Section */}
@@ -716,10 +768,14 @@ function PlasticFootprintCalculator() {
                         </p>
                       )}
 
+                    {/* --- Display Chart and List if History Exists --- */}
                     {!historyLoading && !historyError && history.length > 0 && (
                       <>
+                        {/* --- History Chart --- */}
                         <div className="history-chart-container">
+                          {/* ... (Your Recharts chart JSX goes here) ... */}
                           <ResponsiveContainer width="100%" height={300}>
+                            {/* Your existing LineChart JSX */}
                             <LineChart
                               data={chartData}
                               margin={{
@@ -754,19 +810,50 @@ function PlasticFootprintCalculator() {
                             </LineChart>
                           </ResponsiveContainer>
                         </div>
-                        {/* Optional: Display history list here */}
-                        {/* <ul>
-                                    {history.map(record => (
-                                        <li key={record._id}>
-                                            {new Date(record.date).toLocaleDateString()}: {record.carbonFootprint.toFixed(2)} kg CO2e
-                                        </li>
-                                    ))}
-                                </ul> */}
+                        {/* --- NEW: History List with Delete Buttons --- */}
+                        {/* Add a list or table to display individual entries */}
+                        <div className="history-list-container">
+                          {" "}
+                          {/* Add a container class for styling */}
+                          <h4>Detailed Entries:</h4>
+                          <ul>
+                            {/* Map over the history state to display each record */}
+                            {history.map((record) => (
+                              <li key={record._id} className="history-item">
+                                {" "}
+                                {/* Add class for styling */}
+                                {/* Display record details */}
+                                <span>
+                                  {new Date(record.date).toLocaleDateString()} -
+                                  CF: {record.carbonFootprint.toFixed(2)} kg
+                                  CO2e, Score: {record.points}/100
+                                  {/* You could display individual item counts too if desired */}
+                                  {/* (Bottles: {record.bottles}, Bags: {record.bags}, ...) */}
+                                </span>
+                                {/* --- Delete Button/Icon --- */}
+                                <button
+                                  className="delete-usage-button" // Add class for styling
+                                  onClick={() => handleDeleteUsage(record._id)} // Call handler with record's _id
+                                  disabled={deletingId === record._id} // Disable while this item is deleting
+                                >
+                                  {/* Use text or an icon */}
+                                  {deletingId === record._id ? (
+                                    "Deleting..."
+                                  ) : (
+                                    <FiTrash2 />
+                                  )}{" "}
+                                  {/* Show text/icon based on loading state */}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>{" "}
+                        {/* --- End History List --- */}
                       </>
                     )}
                   </div>
                 ) : (
-                  <p>Log in to view your plastic usage history.</p>
+                  <p>Log in to view and manage your plastic usage history.</p>
                 )}
               </div>
             )}

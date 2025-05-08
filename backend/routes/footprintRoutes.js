@@ -6,6 +6,7 @@ import {
   saveFootprintUsage,
   getFootprintHistory,
   generatePlasticReport,
+  deleteFootprintUsage,
 } from "../controllers/footprintController.js";
 // Import userAuth middleware (assuming its path)
 import userAuth from "../middleware/userAuth.js"; // Adjust this path
@@ -25,4 +26,5 @@ router.post("/save-usage", userAuth, saveFootprintUsage); // Apply userAuth midd
 router.get("/history", userAuth, getFootprintHistory); // Apply userAuth middleware
 // Remove the old calculatePlasticFootprint function and the old POST /calculate handler from here
 router.get("/report", userAuth, generatePlasticReport); // Apply userAuth middleware
+router.delete("/history/:id", userAuth, deleteFootprintUsage); // DELETE /api/footprint/history/:id
 export default router;

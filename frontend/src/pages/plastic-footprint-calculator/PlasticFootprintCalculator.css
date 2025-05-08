@@ -356,6 +356,7 @@
 /* Style for the chart container */
 .history-chart-container {
   margin-top: 20px;
+  margin-bottom: 20px;
   background-color: #fff; /* White background for the chart area */
   padding: 15px;
   border-radius: 5px;
@@ -630,4 +631,78 @@
 /* Add a rule to ensure it doesn't have the same bottom margin as regular paragraphs if they have one */
 .plastic-calculator-breakdown-modal .estimation-note {
   margin-bottom: 15px; /* Keep consistency with other paragraphs, or adjust */
+}
+
+/* --- NEW: Styles for History List --- */
+.history-list-container {
+  margin-top: 30px; /* Space above the list */
+  padding: 20px;
+  background-color: #006064; /* Match other sections */
+  border: 1px solid #00838f;
+  border-radius: 5px;
+  color: #e0f7fa; /* Light text */
+}
+
+.history-list-container h4 {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #f3fbfd;
+  border-bottom: 1px solid #00838f;
+  padding-bottom: 10px;
+}
+
+.history-list-container ul {
+  list-style: none; /* Remove default list bullets */
+  padding: 0;
+  margin: 0;
+}
+
+.history-item {
+  display: flex; /* Use flexbox to align content and button */
+  justify-content: space-between; /* Space out content and button */
+  align-items: center; /* Vertically center items */
+  padding: 10px 0;
+  border-bottom: 1px solid #00838f; /* Separator between items */
+}
+
+.history-item:last-child {
+  border-bottom: none; /* No border on the last item */
+}
+
+.history-item span {
+  flex-grow: 1; /* Allow the text content to take available space */
+  margin-right: 10px; /* Space between text and button */
+  word-break: break-word; /* Break long text if needed */
+}
+
+/* --- NEW: Style for Delete Usage Button --- */
+.delete-usage-button {
+  padding: 5px 10px;
+  background-color: #ef4444; /* Red color for delete */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0; /* Prevent button from shrinking */
+  display: flex; /* Use flex to center icon/text if using icon */
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-usage-button:hover {
+  background-color: #dc2626; /* Darker red on hover */
+}
+
+.delete-usage-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Style for the delete icon inside the button */
+.delete-usage-button svg {
+  /* Optional: Adjust size or margin for the icon */
+  /* margin-right: 5px; */
 }

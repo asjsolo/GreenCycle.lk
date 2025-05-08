@@ -495,6 +495,62 @@ const generatePlasticReport = async (req, res) => {
   }
 };
 
+// --- NEW Controller: Delete Footprint Usage Record ---
+export const deleteFootprintUsage = async (req, res) => {
+  try {
+    const userId = req.user._id; // Get user ID from authenticated request
+    const usageId = req.params.id; // Get the ID of the usage record from the URL parameters
+
+    // Validate if the provided ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(usageId)) {
+      console.log(`Delete attempt with invalid ID format: ${usageId}`);
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid usage record ID format." });
+    }
+
+    console.log(
+      `Attempting to delete plastic usage record ${usageId} for user ${userId}`
+    );
+
+    // Find and delete the record, ensuring it belongs to the authenticated user
+    const result = await PlasticUsage.deleteOne({
+      _id: usageId,
+      userId: userId, // Crucially verify user ownership
+    });
+
+    if (result.deletedCount === 0) {
+      // If no document was deleted, it means either the ID was wrong or it didn't belong to the user
+      console.log(
+        `Delete failed: Record ${usageId} not found or does not belong to user ${userId}`
+      );
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "Plastic usage record not found or does not belong to you.",
+        });
+    }
+
+    console.log(`Successfully deleted plastic usage record: ${usageId}`);
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Plastic usage record deleted successfully.",
+        deletedId: usageId,
+      });
+  } catch (error) {
+    console.error("Error deleting plastic usage record:", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "An internal server error occurred while deleting the record.",
+      });
+  }
+};
+
 // Export all controller functions
 export {
   calculateFootprint,
