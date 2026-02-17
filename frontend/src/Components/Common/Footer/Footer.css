@@ -1,0 +1,282 @@
+/* General Footer Styles */
+.footer {
+    background-color: #fefeff; /* Light blue background */
+    color: #333; /* Dark text */
+    padding: 20px 0; /* Padding around content */
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    background-color: #7cbf77; /* Blue background for newsletter section */
+    color: #fff; /* White text */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.newsletter-content {
+    display: flex;
+    gap: 20px;
+}
+
+.newsletter-image {
+    width: 150px;
+    height: auto;
+}
+.newsletter-image2 {
+    width: 150px;
+    height: auto;
+    margin-left: 100px; /* Adjust the value as needed to shift it left */
+}
+.newsletter-image3 {
+    width: 150px;
+    height: auto;
+    margin-left: 100px; /* Adjust the value as needed to shift it left */
+}
+
+
+.newsletter-text {
+    flex-grow: 1;
+}
+
+.newsletter-text h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.newsletter-text p {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.newsletter-input {
+    padding: 8px;
+    width: 200px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+}
+
+.newsletter-button {
+    margin-bottom: 20px;
+
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.newsletter-button:hover {
+    background-color: #e6f7ff; /* Lighter blue hover effect */
+}
+
+.small-text {
+    font-size: 0.8rem;
+    color: #e9f0ea;
+}
+
+/* Footer Content */
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    padding-top: 60px;
+
+}
+
+
+
+.footer-logo {
+    width:50px;
+    height: auto;
+}
+
+.footer-description {    
+    font-size: 0.9rem;
+    margin: 10px 0;
+    padding: 20px;
+    text-align: left;
+}
+
+.footer-description h1 {
+    padding-bottom: 10px;
+    justify-content: center;  /* Horizontally center */
+    align-items: left;      /* Vertically center */
+    font-size: 60px;    
+    margin: 10px 0;
+    padding: 20px;
+}
+
+/* Footer Column Styling */
+.footer-column {
+    text-align: left; /* Align text to the left */
+    margin-bottom: 20px; /* Add spacing between columns */
+}
+
+.footer-column h3 {
+    font-size: 1.2rem; /* Increase font size for headings */
+    font-weight: bold; /* Make headings bold */
+    margin-bottom: 20px; /* Add spacing between list items */
+    color: #333; /* Dark text color for headings */
+}
+.footer-column h4 {
+    text-align: center;
+    margin-left: -165px; /* Add spacing between list items */
+
+
+}
+
+.footer-column ul {
+    list-style: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.footer-column li {
+    margin-bottom: 15px; /* Add spacing between list items */
+}
+/* Style for the recycling emoji */
+.footer-column h1 {
+    font-size: 3rem; /* Adjust the size of the emoji */
+    text-align: left; /* Center-align the emoji */
+    padding: 25px;
+    margin-top: -35px; /* Add spacing between list items */
+    margin-left: -30px; /* Add spacing between list items */
+
+    
+}
+
+.footer-column a {
+    text-decoration: none; /* Remove underlines from links */
+    color: #666; /* Gray text color for links */
+    font-size: 0.9rem; /* Slightly smaller font size for links */
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+.footer-column a:hover {
+    color: #007bff; /* Blue color on hover */
+}
+
+/* General Social Icons Styling */
+.social-icons {
+    display: flex;
+    justify-content: center; /* Center-align the icons horizontally */
+    align-items: center; /* Vertically align the icons */
+    gap: 10px; /* Add spacing between icons */
+    margin-top: 20px; /* Add spacing above the icons */
+}
+
+
+
+
+
+
+/* Specific Styling for Facebook Icon */
+.social-icons a:nth-child(1) {
+    color: #1877f2; /* Facebook blue color */
+}
+
+.social-icons a:nth-child(1):hover {
+    color: #3a71b8; /* Darker Facebook blue on hover */
+}
+/* Specific Styling for Facebook Icon */
+/* Specific Styling for Facebook Icon */
+.social-icons a:nth-child(2) {
+    color: #1DA1F2; /* Facebook blue color */
+}
+
+.social-icons a:nth-child(2):hover {
+    color: #4582a8; /* Darker Facebook blue on hover */
+}
+.social-icons a:nth-child(3) {
+    color: #E1306C; /* Facebook blue color */
+}
+
+.social-icons a:nth-child(3):hover {
+    color: #ca6a8c; /* Darker Facebook blue on hover */
+}
+/* Specific Styling for Facebook Icon */
+.social-icons a:nth-child(4) {
+    color: #0077B5; /* Facebook blue color */
+}
+
+.social-icons a:nth-child(4):hover {
+    color: #2e86b5; /* Darker Facebook blue on hover */
+}
+
+/* Specific Styling for Facebook Icon */
+.social-icons a:nth-child(5) {
+    color: #df1212; /* Facebook blue color */
+}
+
+.social-icons a:nth-child(5):hover {
+    color: #ff0000; /* Darker Facebook blue on hover */
+}
+
+
+
+
+
+/* Contact Icons in Footer Column */
+.contact-icons {
+    display: flex; /* Align icons and text horizontally */
+    align-items: center; /* Vertically center icons and text */
+    gap: 5px; /* Add spacing between icons and text */
+}
+
+.contact-icons i {
+    font-size: 1rem; /* Adjust icon size */
+    color: #007bff; /* Blue color for icons */
+}
+
+/* Copyright Section */
+.copyright {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+    padding-top: 60px;
+}
+
+.copyright p {
+    margin-bottom: 20px;
+}
+
+.copyright nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+    
+}
+
+.copyright nav ul li a {
+    text-decoration: none;
+    color: #000; /* Ensure links are black */
+    font-size: 14px;
+}
+
+
+
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-column {
+        margin-bottom: 20px;
+    }
+}
