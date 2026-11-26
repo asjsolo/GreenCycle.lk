@@ -1,0 +1,64 @@
+:root {
+  --gap: 24px;
+  --max-chart-width: 500px;
+  --section-heading-color: #555;
+  --chart-height: 300px;
+}
+
+/* Basic styling for the analytics page container */
+.analytics-page {
+  padding: 20px;
+}
+
+/* Layout for eco-score trend and both charts */
+.charts-layout-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* On larger screens: show charts side by side */
+@media (min-width: 768px) {
+  .charts-layout-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+/* Each chart container */
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: var(--max-chart-width);
+  height: var(--chart-height); /* Ensures consistent height */
+  margin: 0 auto;
+  flex: 1 1 45%; /* Flexible size with wrapping */
+
+  @media (min-width: 768px) {
+    margin: 0; /* Remove center alignment when side-by-side */
+  }
+}
+
+/* Chart sections (Bar + Doughnut) */
+.weekly-completed-chart,
+.category-breakdown-chart {
+  width: 100%;
+
+  @media (min-width: 768px) {
+    flex: 1 1 45%;
+  }
+}
+
+/* Eco-score trend section */
+.eco-score-trend {
+  margin-bottom: var(--gap);
+}
+
+/* Headings inside each chart/section */
+.analytics-page h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--section-heading-color);
+  text-align: center;
+}

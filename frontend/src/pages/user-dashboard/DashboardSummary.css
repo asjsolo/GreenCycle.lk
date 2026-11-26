@@ -1,0 +1,214 @@
+/*ORIGINAL*/
+/* frontend/pages/user-dashboard/dashboard-summary/DashboardSummary.css */
+
+/* Define a basic color palette using CSS variables (optional but recommended) */
+/* These colors are based on the Tailwind classes used previously */
+:root {
+  --color-white: #004643;
+  --color-gray-100: #e8e4e6; /* Light grey background for cards */
+  --color-gray-700: #374151; /* Dark grey text */
+  --color-blue-600: #2563eb; /* Blue for streak */
+  --color-green-600: #16a34a; /* Green for XP */
+  --color-purple-600: #9333ea; /* Purple for completed today */
+  --color-yellow-600: #f0ac19; /* Yellow for badges */
+  --color-red-600: #dc2626; /* Red for down trend/error */
+  --color-gray-600: #4b5563; /* Grey for no change trend */
+  --color-red-500: #ef4444; /* Red for error messages */
+}
+
+/* Main container for the Dashboard Summary page */
+.dashboard-summary-page {
+  padding: 24px; /* Equivalent to Tailwind p-6 (6 * 4px = 24px) */
+  background-color: var(--color-white); /* Equivalent to Tailwind bg-white */
+  border-radius: 8px; /* Equivalent to Tailwind rounded */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Equivalent to Tailwind shadow */
+}
+
+/* Styling for general messages (loading, not authenticated) */
+.dashboard-message {
+  padding: 24px; /* Equivalent to Tailwind p-6 */
+  text-align: center; /* Equivalent to Tailwind text-center */
+}
+
+.dashboard-message.error {
+  color: var(--color-red-500); /* Equivalent to Tailwind text-red-500 */
+}
+
+/* Styling for the main heading */
+.dashboard-heading {
+  font-size: 1.5rem; /* Equivalent to Tailwind text-2xl (adjusting slightly for better hierarchy) */
+  font-weight: 700; /* Equivalent to Tailwind font-bold */
+  margin-bottom: 16px; /* Equivalent to Tailwind mb-4 (4 * 4px = 16px) */
+  color: #fffffe; /* Dark text color */
+}
+
+/* Styling for the user profile summary section */
+.user-summary-profile {
+  margin-bottom: 20px; /* Space below the profile section */
+}
+
+.profile-welcome-heading {
+  font-size: 1.25rem; /* Equivalent to Tailwind text-xl */
+  font-weight: 600; /* Equivalent to Tailwind font-semibold */
+  color: #333; /* Dark text color */
+}
+
+/* Styling for the statistics grid container */
+.user-statistics {
+  display: grid; /* Use CSS Grid */
+  grid-template-columns: repeat(1, minmax(0, 1fr)); /* Default 1 column */
+  gap: 16px; /* Equivalent to Tailwind gap-4 */
+  margin-bottom: 25px; /* Space below the stats grid */
+}
+
+/* Responsive grid adjustments */
+@media (min-width: 640px) {
+  /* Equivalent to Tailwind sm: breakpoint */
+  .user-statistics {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    ); /* 2 columns on small screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Equivalent to Tailwind lg: breakpoint */
+  .user-statistics {
+    grid-template-columns: repeat(
+      3,
+      minmax(0, 1fr)
+    ); /* 3 columns on large screens */
+  }
+}
+
+/* Styling for individual statistic cards */
+.stat-card {
+  background-color: var(
+    --color-gray-100
+  ); /* Equivalent to Tailwind bg-gray-100 */
+  padding: 16px; /* Equivalent to Tailwind p-4 */
+  border-radius: 8px; /* Equivalent to Tailwind rounded */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Equivalent to Tailwind shadow */
+  text-align: center; /* Equivalent to Tailwind text-center */
+}
+
+.stat-title {
+  font-size: 0.875rem; /* Equivalent to Tailwind text-md (adjusting slightly) */
+  font-weight: 600; /* Equivalent to Tailwind font-semibold */
+  color: var(--color-gray-700); /* Equivalent to Tailwind text-gray-700 */
+  margin-bottom: 8px; /* Equivalent to Tailwind mb-2 */
+  text-transform: uppercase; /* Uppercase stat titles */
+}
+
+.stat-value {
+  font-size: 2rem; /* Equivalent to Tailwind text-2xl */
+  font-weight: 700; /* Equivalent to Tailwind font-bold */
+  /* Colors (text-blue-600, text-green-600, etc.) are still applied via Tailwind classes in JSX for simplicity */
+}
+
+/* Styling for the Eco-Score Trend display section */
+.eco-score-trend-display {
+  background-color: var(--color-white); /* Equivalent to Tailwind bg-white */
+  padding: 16px; /* Equivalent to Tailwind p-4 */
+  border-radius: 8px; /* Equivalent to Tailwind rounded */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Equivalent to Tailwind shadow */
+  margin-bottom: 25px; /* Space below this section */
+}
+
+.trend-heading {
+  font-size: 1.125rem; /* Equivalent to Tailwind text-lg */
+  font-weight: 600; /* Equivalent to Tailwind font-semibold */
+  color: #fffffe;
+  margin-bottom: 8px; /* Equivalent to Tailwind mb-2 */
+}
+
+.trend-summary {
+  font-size: 1rem; /* Equivalent to Tailwind text-gray-700 (default size) */
+  color: #abd1c6;
+  line-height: 1.5;
+}
+
+/* Styling for the trend percentage/icon line */
+.trend-percentage {
+  font-size: 1.25rem; /* Equivalent to Tailwind text-xl */
+  font-weight: 700; /* Equivalent to Tailwind font-bold */
+  margin-top: 8px; /* Equivalent to Tailwind mt-2 */
+  /* Colors (text-green-600, text-red-600, text-gray-600) are still applied via Tailwind in JSX */
+}
+
+/* Styling for the icons within the trend line */
+.trend-percentage .inline-block {
+  display: inline-block;
+  margin-right: 4px; /* Equivalent to Tailwind mr-1 */
+  vertical-align: middle; /* Align icons vertically */
+}
+
+/* Styling for the generate report section */
+.generate-report-section {
+  background-color: var(--color-white); /* Equivalent to Tailwind bg-white */
+  padding: 16px; /* Equivalent to Tailwind p-4 */
+  border-radius: 8px; /* Equivalent to Tailwind rounded */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Equivalent to Tailwind shadow */
+  margin-bottom: 25px; /* Space below this section */
+}
+
+.report-heading {
+  font-size: 1.125rem; /* Equivalent to Tailwind text-lg */
+  font-weight: 600; /* Equivalent to Tailwind font-semibold */
+  color: #fffffe;
+  margin-bottom: 8px; /* Equivalent to Tailwind mb-2 */
+}
+
+.report-description {
+  font-size: 1rem; /* Equivalent to Tailwind text-gray-700 (default size) */
+  color: #abd1c6;
+  margin-bottom: 16px; /* Equivalent to Tailwind mb-4 */
+}
+
+/* Styling for the generate report button */
+.report-button {
+  background-color: #004643; /* Equivalent to Tailwind bg-green-500 (using 600 for consistency) */
+  color: #fffffe; /* Equivalent to Tailwind text-white */
+  font-weight: 700; /* Equivalent to Tailwind font-bold */
+  padding: 8px 16px; /* Equivalent to Tailwind py-2 px-4 */
+  border-radius: 4px; /* Equivalent to Tailwind rounded */
+  border: 3px solid #0c110f; /* Green border */
+  cursor: pointer;
+  transition: background-color 0.2s ease; /* Add transition for hover */
+}
+
+.report-button:hover:not(:disabled) {
+  color: #001e1d;
+  background-color: #f9bc60; /* Darker green on hover (Equivalent to Tailwind hover:bg-green-700) */
+}
+
+.report-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.report-error-message {
+  color: var(--color-red-500); /* Equivalent to Tailwind text-red-500 */
+  margin-top: 8px; /* Equivalent to Tailwind mt-2 */
+  font-size: 0.875rem; /* Standard small text size */
+}
+
+/* Styling for the recent activity/badges section */
+.recent-activity-badges {
+  background-color: var(
+    --color-gray-100
+  ); /* Equivalent to Tailwind bg-gray-100 */
+  padding: 16px; /* Equivalent to Tailwind p-4 */
+  border-radius: 8px; /* Equivalent to Tailwind rounded */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Equivalent to Tailwind shadow */
+}
+
+.recent-activity-heading {
+  font-size: 1.25rem; /* Equivalent to Tailwind text-xl */
+  font-weight: 600; /* Equivalent to Tailwind font-semibold */
+  color: #333;
+  margin-bottom: 16px; /* Equivalent to Tailwind mb-4 */
+}
+
+/* Add styles for specific activity items or badge displays when implemented */

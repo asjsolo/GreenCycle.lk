@@ -1,0 +1,178 @@
+/* frontend/Components/Common/ReportModal.css */
+
+/* Modal Overlay */
+.report-modal-overlay {
+  position: fixed; /* Fixed position relative to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  display: flex; /* Use flexbox to center the modal content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1001; /* Ensure it's above everything else, higher than notifications */
+  animation: fadeIn 0.3s ease-out; /* Fade-in animation */
+}
+
+/* Modal Content */
+.report-modal-content {
+  background-color: #fff; /* White background for the content */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Larger shadow */
+  width: 90%; /* Max width relative to viewport */
+  max-width: 600px; /* Max absolute width */
+  max-height: 90vh; /* Max height relative to viewport */
+  overflow-y: auto; /* Add scrollbar if content overflows vertically */
+  display: flex; /* Use flexbox for header, body, footer layout */
+  flex-direction: column; /* Stack children vertically */
+  animation: slideIn 0.3s ease-out; /* Slide-in animation */
+  font-family: "Inter", sans-serif; /* Ensure font consistency */
+  color: #013d5a; /* Use Midnight hex code for default text */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between; /* Space out title and close button */
+  align-items: center; /* Vertically align */
+  padding: 15px 20px; /* Padding */
+  border-bottom: 1px solid #bdd3ce; /* Use Celeste hex code */
+}
+
+.modal-header h2 {
+  margin: 0; /* Remove default margin */
+  font-size: 1.4rem; /* Slightly larger title */
+  color: #013d5a; /* Use Midnight hex code */
+  font-weight: 700;
+}
+
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #708069; /* Use Herb hex code */
+  transition: color 0.2s ease-in-out;
+}
+
+.modal-close-button:hover {
+  color: #013d5a; /* Use Midnight hex code on hover */
+}
+
+.modal-body {
+  padding: 20px; /* Padding for the body content */
+  flex-grow: 1; /* Allow body to fill available space */
+}
+
+.report-section {
+  margin-bottom: 20px; /* Space between sections */
+  padding-bottom: 15px; /* Padding at the bottom of the section */
+  border-bottom: 1px dashed #bdd3ce; /* Use Celeste hex code */
+}
+
+.report-section:last-child {
+  border-bottom: none; /* No border on the last section */
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.report-section h3 {
+  font-size: 1.2rem; /* Slightly larger section titles */
+  font-weight: 600; /* Semibold */
+  margin-bottom: 8px;
+  color: #708069; /* Use Herb hex code (or Celeste #BDD3CE) */
+}
+
+.report-section p,
+.report-section ul li {
+  font-size: 1rem; /* Standard text size */
+  color: #013d5a; /* Use Midnight hex code for text */
+  line-height: 1.5;
+}
+
+.report-section ul {
+  list-style: disc inside;
+  padding-left: 0;
+}
+
+.report-section ul li {
+  margin-bottom: 5px;
+}
+
+.report-section strong {
+  font-weight: 700; /* Bold text */
+}
+
+/* Style for trend text color */
+.report-section .text-green-600 {
+  color: #708069;
+} /* Use Herb hex code */
+.report-section .text-red-600 {
+  color: #ef4444;
+} /* Keep standard red for decrease/negative trend */
+.report-section .text-gray-600 {
+  color: #013d5a;
+} /* Use Midnight hex code for no change */
+
+/* Modal footer styling */
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #bdd3ce; /* Use Celeste hex code */
+  text-align: right;
+  display: flex; /* Use flexbox for buttons */
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px; /* Space between buttons */
+}
+
+/* --- Styling for the Export to PDF button --- */
+.export-pdf-button {
+  background-color: #f4a258; /* Use Marigold hex code */
+  color: #fcf3e3; /* Use Lionsmane hex code */
+  font-weight: 700;
+  padding: 10px 15px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.export-pdf-button:hover {
+  background-color: #e0954c; /* Slightly darker Marigold */
+}
+
+/* Styling for the Close button */
+.close-modal-button {
+  background-color: #e5e7eb; /* Light grey */
+  color: #4b5563; /* Dark grey */
+  font-weight: 700;
+  padding: 10px 15px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.close-modal-button:hover {
+  background-color: #d1d5db; /* Slightly darker grey */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

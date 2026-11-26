@@ -1,0 +1,176 @@
+/* frontend/pages/ContactUs.css */
+
+.contact-us-page {
+  padding-top: 60px; /* Account for fixed navbar */
+  padding-bottom: 40px;
+  font-family: "Inter", sans-serif;
+  max-width: 800px; /* Limit content width */
+  margin: 0 auto; /* Center the content */
+}
+
+.contact-us-page section {
+  margin-bottom: 30px;
+  padding: 0 20px; /* Horizontal padding */
+}
+
+.contact-us-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contact-us-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #013d5a; /* Use Midnight hex code */
+  margin-bottom: 15px;
+}
+
+.contact-us-header p {
+  font-size: 1.1rem;
+  color: #013d5a; /* Use Midnight hex code */
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.contact-form-section h2,
+.contact-info-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  /* Change this color to something with better contrast */
+  color: #013d5a; /* Use Midnight hex code for better contrast */
+  /* You could also try a much lighter color like Lionsmane: color: #FCF3E3; */
+  margin-bottom: 20px;
+  border-bottom: 2px solid #bdd3ce; /* Use Celeste hex code */
+  padding-bottom: 10px;
+}
+/* Styling for submission status messages */
+.contact-us-submit-message {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.contact-us-submit-message.loading {
+  background-color: #e0f7fa; /* Light blue */
+  color: #007b8a; /* Teal */
+  border: 1px solid #b2ebf2;
+}
+
+.contact-us-submit-message.success {
+  background-color: #d4edda; /* Light green */
+  color: #155724; /* Dark green */
+  border: 1px solid #c3e6cb;
+}
+
+.contact-us-submit-message.error {
+  background-color: #f8d7da; /* Light red */
+  color: #721c24; /* Dark red */
+  border: 1px solid #f5c6cb;
+}
+
+/* Form Group Styling */
+.contact-form-section .form-group {
+  margin-bottom: 20px;
+}
+
+.contact-form-section .form-group label {
+  display: block;
+  color: #013d5a; /* Use Midnight hex code - Adjust this if needed for contrast with your background */
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+
+  /* --- NEW: Override hiding styles --- */
+  position: static; /* Or relative, but static is usually fine for labels */
+  width: auto; /* Allow label to take natural width */
+  height: auto; /* Allow label to take natural height */
+  overflow: visible; /* Ensure overflow is visible */
+  clip: auto; /* Remove clipping */
+  /* Reset margin/padding that might be part of the hiding style */
+  margin: 0 0 8px 0; /* Top, Right, Bottom (match original margin-bottom), Left */
+  padding: 0;
+  /* Reset any potentially negative positioning */
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  z-index: auto; /* Reset z-index if it was set to a hiding value */
+  /* --- End Override --- */
+}
+
+/* Styling for input fields */
+.contact-form-section .form-group input[type="text"],
+.contact-form-section .form-group input[type="email"],
+.contact-form-section .form-group textarea {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  appearance: none;
+  border: 1px solid #bdd3ce; /* Use Celeste hex code */
+  border-radius: 4px;
+  width: 100%;
+  padding: 10px 12px;
+  color: #013d5a; /* Use Midnight hex code */
+  line-height: 1.5; /* Standard line height */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.contact-form-section .form-group input[type="text"]:focus,
+.contact-form-section .form-group input[type="email"]:focus,
+.contact-form-section .form-group textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5); /* Focus ring */
+  border-color: #3498db; /* Focus border color (Standard Blue) */
+}
+
+.contact-form-section .form-group textarea {
+  min-height: 150px; /* Minimum height for the message area */
+  resize: vertical; /* Allow vertical resizing */
+}
+
+/* Form Actions (Button Container) */
+.contact-form-section .form-actions {
+  margin-top: 25px;
+  text-align: center; /* Center the button */
+}
+
+.contact-form-section button[type="submit"] {
+  background-color: #f4a258; /* Use Marigold hex code */
+  color: #fcf3e3; /* Use Lionsmane hex code */
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  font-size: 1rem;
+}
+
+.contact-form-section button[type="submit"]:hover {
+  background-color: #e0954c; /* Slightly darker Marigold */
+}
+
+.contact-form-section button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Optional: Contact Info Section Styling */
+/* .contact-info-section {
+    // Add styles here
+} */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .contact-us-header h1 {
+    font-size: 2rem;
+  }
+  .contact-us-header p {
+    font-size: 1rem;
+  }
+  .contact-form-section h2,
+  .contact-info-section h2 {
+    font-size: 1.5rem;
+  }
+}

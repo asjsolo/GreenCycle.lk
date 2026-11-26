@@ -1,0 +1,41 @@
+.achievements-page {
+  padding: 1.5rem;
+  background-color: #004643;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.achievements-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #fffffe;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .achievements-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.loading-text,
+.error-text {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.error-text {
+  color: #ef4444; /* Tailwind red-500 */
+}
